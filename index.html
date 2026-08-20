@@ -159,6 +159,42 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
 @media(max-width:900px){.retire-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.retire-grid{grid-template-columns:1fr}}
 
+
+/* Sticky compact progress */
+.progress{
+  position:sticky;
+  top:68px;
+  z-index:24;
+  transition:padding .22s ease, border-radius .22s ease, box-shadow .22s ease, background .22s ease;
+}
+.progress.sticky-compact{
+  padding:8px 14px;
+  border-radius:12px;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(14px);
+  box-shadow:0 8px 24px rgba(30,60,90,.12);
+}
+.progress.sticky-compact .progress-head{margin-bottom:6px}
+.progress.sticky-compact .progress-head strong{font-size:13px}
+.progress.sticky-compact .progress-head span{font-size:12px}
+.progress.sticky-compact .track{height:6px}
+.progress.sticky-compact .levels{
+  margin-top:6px;
+  gap:5px;
+}
+.progress.sticky-compact .level{
+  padding-top:4px;
+  border-top-width:2px;
+  font-size:9px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+@media(max-width:900px){
+  .progress{top:64px}
+  .progress.sticky-compact .levels{display:none}
+}
+
 </style>
 </head>
 <body>
@@ -168,7 +204,7 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
 </header>
 
 <main class="shell">
-  <section class="hero">
+  <section class="hero" id="heroSection">
     <div class="hero-grid">
       <div><h1>เวลาชีวิตของ “สองสิ่งมีชีวิต” ที่สำคัญต่อกัน</h1>
       <p>ใช้ได้กับคู่รัก พ่อแม่ ลูก เพื่อน พี่น้อง เจ้าของธุรกิจ คนเกษียณ นักศึกษา ฟรีแลนซ์ หรือแม้แต่สัตว์เลี้ยง โดยระบบจะถามตามบริบทแทนการบังคับใช้แบบฟอร์มพนักงานประจำ</p></div>
@@ -176,7 +212,7 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
     </div>
   </section>
 
-  <section class="progress">
+  <section class="progress" id="stickyProgress">
     <div class="progress-head"><strong id="progressLabel">Level 1 of 7</strong><span id="progressPct">0%</span></div>
     <div class="track"><div class="fill" id="progressFill"></div></div>
     <div class="levels">
@@ -1027,6 +1063,17 @@ document.querySelectorAll("input,select").forEach(e=>{
     if(el)el.addEventListener("input",()=>{updatePetReference(p);calculate();saveForm()});
   });
 });
+
+function updateStickyProgress(){
+  const hero=$("heroSection"), progress=$("stickyProgress");
+  if(!hero || !progress) return;
+  const shouldCompact = window.scrollY > Math.max(80, hero.offsetTop + hero.offsetHeight - 70);
+  progress.classList.toggle("sticky-compact", shouldCompact);
+}
+window.addEventListener("scroll", updateStickyProgress, {passive:true});
+window.addEventListener("resize", updateStickyProgress);
+updateStickyProgress();
+
 restoreForm();
 refreshPetAgePanels();
 calculate();
