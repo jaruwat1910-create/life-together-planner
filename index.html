@@ -115,6 +115,21 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
 @media(max-width:900px){
  .hero-grid,.two,.kpis{grid-template-columns:1fr}.levels{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.hero-stat{justify-self:start}.barrow{grid-template-columns:1fr}
 }
+
+.guide-card{background:linear-gradient(135deg,#ffffff,#f7fbff);border:1px solid #d9e7f5;border-radius:16px;box-shadow:var(--shadow);margin-bottom:18px;overflow:hidden}
+.guide-head{padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #e8eef5}
+.guide-head h2{margin:0;font-size:18px}.guide-head p{margin:3px 0 0;color:var(--muted);font-size:12.5px}
+.guide-body{padding:18px 20px}
+.guide-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.guide-item{border:1px solid #e1e8f0;border-radius:12px;padding:13px;background:#fff}
+.guide-item b{display:block;margin-bottom:5px}.guide-item p{margin:0;color:#5f5f5f;font-size:12px;line-height:1.45}
+.help-dot{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;background:#eaf3fb;color:var(--blue);font-size:11px;font-weight:800;cursor:help;margin-left:4px}
+.example-box{margin-top:10px;background:#fff8e7;border:1px solid #f1d58d;border-radius:9px;padding:9px 10px;font-size:11.5px;color:#624a12}
+.variable-help{margin-top:6px;padding:8px 10px;border-radius:8px;background:#f7f9fc;border:1px solid #e6ebf1;font-size:11px;color:#626262;line-height:1.45}
+.guide-toggle{border:1px solid #c8c8c8;background:#fff;border-radius:7px;padding:7px 11px;font-weight:600}
+.guide-hidden{display:none}
+@media(max-width:900px){.guide-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -138,6 +153,50 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
     <div class="levels">
       <div class="level active" data-l="1">1 · Profiles</div><div class="level" data-l="2">2 · Lifestyle</div><div class="level" data-l="3">3 · Daily life</div>
       <div class="level" data-l="4">4 · Days together</div><div class="level" data-l="5">5 · Quality time</div><div class="level" data-l="6">6 · Future</div><div class="level" data-l="7">7 · Results</div>
+    </div>
+  </section>
+
+  <section class="guide-card">
+    <div class="guide-head">
+      <div>
+        <h2>คู่มือการกรอกข้อมูล</h2>
+        <p>กรอกเฉพาะสิ่งที่คุณพอประเมินได้จริง ระบบจะคำนวณสัดส่วนและเวลาร่วมให้เอง</p>
+      </div>
+      <button class="guide-toggle" type="button" onclick="toggleGuide()">ซ่อน / แสดงคู่มือ</button>
+    </div>
+    <div class="guide-body" id="guideBody">
+      <div class="guide-grid">
+        <div class="guide-item">
+          <b>1. Profile คือใคร?</b>
+          <p>เลือกคนหรือสัตว์เลี้ยง แล้วใส่ข้อมูลพื้นฐานให้ตรงกับชีวิตจริงที่สุด ไม่จำเป็นต้องกรอกทุกช่องถ้าไม่เกี่ยวข้อง</p>
+          <div class="example-box"><b>ตัวอย่าง:</b> Profile A = คุณ, Profile B = คุณแม่ที่เกษียณแล้ว หรือ Profile B = สุนัขที่เลี้ยงอยู่</div>
+        </div>
+        <div class="guide-item">
+          <b>2. Lifestyle มีไว้ทำอะไร?</b>
+          <p>ใช้บอกว่าชั่วโมงในแต่ละสัปดาห์ถูกใช้ไปกับอะไร เช่น งานประจำ ธุรกิจ การเรียน งานบ้าน หรือกิจวัตรหลังเกษียณ</p>
+          <div class="example-box"><b>ตัวอย่าง:</b> เจ้าของธุรกิจไม่ต้องมีเวลาเลิกงานตายตัว จึงกรอกชั่วโมงดูธุรกิจและงานนอกเวลาแทน</div>
+        </div>
+        <div class="guide-item">
+          <b>3. Shared Presence ต่างจาก Quality Time</b>
+          <p>Shared Presence = มีโอกาสอยู่/พบกัน ส่วน Quality Time = เวลาที่ตั้งใจมีปฏิสัมพันธ์กันจริง</p>
+          <div class="example-box"><b>ตัวอย่าง:</b> อยู่บ้านด้วยกัน 5 ชม. แต่คุย เล่น เดินเล่น หรือทำกิจกรรมด้วยกันจริง 2 ชม.</div>
+        </div>
+        <div class="guide-item">
+          <b>4. ทำไมไม่ถามเป็น %?</b>
+          <p>เพราะคนส่วนใหญ่เดาเปอร์เซ็นต์ได้ยาก ระบบจึงให้กรอกจำนวนวันและจำนวนชั่วโมง แล้วคำนวณ % ให้ภายหลัง</p>
+          <div class="example-box"><b>ตัวอย่าง:</b> พบกัน 5 วัน/สัปดาห์ และมี Quality Time 2 ชม./วัน ระบบจะคำนวณสัดส่วนเอง</div>
+        </div>
+        <div class="guide-item">
+          <b>5. Future Change ใช้อย่างไร?</b>
+          <p>ใช้เมื่อคุณคิดว่าชีวิตในอนาคตจะต่างจากวันนี้อย่างชัดเจน เช่น เกษียณ WFH มากขึ้น ลูกโต หรือย้ายกลับบ้าน</p>
+          <div class="example-box"><b>ตัวอย่าง:</b> อีก 8 ปีคาดว่าเดินทางลดลง 2 ชม./วัน ให้ใส่ Change After = 8 และ Burden Change = -2</div>
+        </div>
+        <div class="guide-item">
+          <b>6. สัตว์เลี้ยงคำนวณอย่างไร?</b>
+          <p>ใช้เวลาที่ Active, เวลาที่อยู่ลำพัง, วันที่มีโอกาสอยู่ด้วยกัน และ Quality Time แทนตรรกะเรื่องงาน/เกษียณ</p>
+          <div class="example-box"><b>ตัวอย่าง:</b> สุนัข Active 3 ชม./วัน แต่คุณอยู่ด้วยจริง 2 วัน/สัปดาห์ ระบบจะใช้ 2 วันนั้นเป็นกรอบการคำนวณ</div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -202,7 +261,8 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
       </div>
       <div class="full grid">
         <div><label>ความสัมพันธ์</label><select id="relation" data-required><option value="" selected disabled>เลือกความสัมพันธ์</option><option>คู่รัก / คู่ชีวิต</option><option>พ่อแม่กับลูก</option><option>พี่น้อง</option><option>เพื่อน</option><option>ญาติ</option><option>คนกับสัตว์เลี้ยง</option><option>สัตว์เลี้ยงด้วยกัน</option><option>อื่น ๆ</option></select></div>
-        <div><label>ช่วงเวลาที่ต้องการจำลอง</label><div class="unit"><input id="horizon_years" type="number" min="1" max="100" placeholder="เช่น 30" data-required><span>ปี</span></div><div class="hint">ใช้เป็น Planning Horizon เท่านั้น ไม่ใช่การทำนายอายุขัย</div></div>
+        <div><label>ช่วงเวลาที่ต้องการจำลอง <span class="help-dot" title="จำนวนปีที่ต้องการใช้เป็นกรอบวิเคราะห์ ไม่ใช่การทำนายอายุขัย">?</span></label>
+<div class="variable-help"><b>ความหมาย:</b> Planning Horizon คือจำนวนปีที่ระบบจะสะสมเวลาร่วมทั้งหมด<br><b>ตัวอย่าง:</b> ต้องการดูอีก 10 ปีข้างหน้า → กรอก 10</div><div class="unit"><input id="horizon_years" type="number" min="1" max="100" placeholder="เช่น 30" data-required><span>ปี</span></div><div class="hint">ใช้เป็น Planning Horizon เท่านั้น ไม่ใช่การทำนายอายุขัย</div></div>
       </div>
     </div>
   </section>
@@ -218,7 +278,7 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
         </div>
         <div id="a_life_pet" class="hidden">
           <div class="grid">
-            <div><label>เวลาที่อยู่ลำพังโดยเฉลี่ย</label><div class="unit"><input id="a_pet_alone" type="number" min="0" max="24" step=".25" placeholder="เช่น 6"><span>ชม./วัน</span></div></div>
+            <div><label>เวลาที่อยู่ลำพังโดยเฉลี่ย <span class="help-dot" title="ใช้เป็นข้อมูลบริบทของสัตว์เลี้ยง ไม่ได้หักซ้ำจากเวลา Active">?</span></label><div class="unit"><input id="a_pet_alone" type="number" min="0" max="24" step=".25" placeholder="เช่น 6"><span>ชม./วัน</span></div><div class="hint">ใช้เป็นข้อมูลบริบท ไม่หักซ้ำจากเวลา Active</div></div>
             <div><label>เวลานอน/พักรวม</label><div class="unit"><input id="a_pet_sleep" type="number" min="0" max="24" step=".25" placeholder="เช่น 12"><span>ชม./วัน</span></div></div>
             <div class="full"><label>กิจกรรมที่ต้องมีคนดูแล</label><div class="unit"><input id="a_pet_care" type="number" min="0" max="12" step=".25" placeholder="เช่น เดินเล่น ให้อาหาร ดูแล 2"><span>ชม./วัน</span></div></div>
           </div>
@@ -232,7 +292,7 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
         </div>
         <div id="b_life_pet" class="hidden">
           <div class="grid">
-            <div><label>เวลาที่อยู่ลำพังโดยเฉลี่ย</label><div class="unit"><input id="b_pet_alone" type="number" min="0" max="24" step=".25" placeholder="เช่น 4"><span>ชม./วัน</span></div></div>
+            <div><label>เวลาที่อยู่ลำพังโดยเฉลี่ย <span class="help-dot" title="ใช้เป็นข้อมูลบริบทของสัตว์เลี้ยง ไม่ได้หักซ้ำจากเวลา Active">?</span></label><div class="unit"><input id="b_pet_alone" type="number" min="0" max="24" step=".25" placeholder="เช่น 4"><span>ชม./วัน</span></div><div class="hint">ใช้เป็นข้อมูลบริบท ไม่หักซ้ำจากเวลา Active</div></div>
             <div><label>เวลานอน/พักรวม</label><div class="unit"><input id="b_pet_sleep" type="number" min="0" max="24" step=".25" placeholder="เช่น 14"><span>ชม./วัน</span></div></div>
             <div class="full"><label>กิจกรรมที่ต้องมีคนดูแล</label><div class="unit"><input id="b_pet_care" type="number" min="0" max="12" step=".25" placeholder="เช่น เล่น แปรงขน 1.5"><span>ชม./วัน</span></div></div>
           </div>
@@ -249,7 +309,8 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
           <div class="human-a hidden"><label>เวลาตื่น</label><input id="a_wake" type="time"></div>
           <div class="human-a hidden"><label>เวลาเข้านอน</label><input id="a_sleep_time" type="time"></div>
           <div class="human-a full hidden"><label>ภารกิจส่วนตัวที่ทำคนเดียว</label><div class="unit"><input id="a_personal" type="number" min="0" max="12" step=".25" placeholder="เช่น งานบ้าน ออกกำลังกาย 2"><span>ชม./วัน</span></div></div>
-          <div class="pet-a full hidden"><label>ช่วงที่สัตว์เลี้ยงมัก active และพร้อมมีปฏิสัมพันธ์</label><div class="unit"><input id="a_pet_active" type="number" min="0" max="24" step=".25" placeholder="เช่น 6"><span>ชม./วัน</span></div></div>
+          <div class="pet-a full hidden"><label>ช่วงที่สัตว์เลี้ยงมัก active และพร้อมมีปฏิสัมพันธ์ <span class="help-dot" title="จำนวนชั่วโมงที่สัตว์ตื่นตัวและพร้อมเล่น เดิน หรือมีปฏิสัมพันธ์">?</span></label>
+<div class="variable-help"><b>ความหมาย:</b> เวลาที่สัตว์พร้อมเล่นหรือทำกิจกรรม ไม่ใช่เวลาตื่นทั้งหมด<br><b>ตัวอย่าง:</b> สุนัขตื่นหลายช่วง แต่พร้อมเล่นจริงรวมประมาณ 3 ชม./วัน → กรอก 3</div><div class="unit"><input id="a_pet_active" type="number" min="0" max="24" step=".25" placeholder="เช่น 6"><span>ชม./วัน</span></div></div>
         </div>
       </div>
       <div class="profile b"><h3><span class="dot"></span>Profile B</h3>
@@ -257,7 +318,8 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
           <div class="human-b hidden"><label>เวลาตื่น</label><input id="b_wake" type="time"></div>
           <div class="human-b hidden"><label>เวลาเข้านอน</label><input id="b_sleep_time" type="time"></div>
           <div class="human-b full hidden"><label>ภารกิจส่วนตัวที่ทำคนเดียว</label><div class="unit"><input id="b_personal" type="number" min="0" max="12" step=".25" placeholder="เช่น งานบ้าน อ่านหนังสือ 1.5"><span>ชม./วัน</span></div></div>
-          <div class="pet-b full hidden"><label>ช่วงที่สัตว์เลี้ยงมัก active และพร้อมมีปฏิสัมพันธ์</label><div class="unit"><input id="b_pet_active" type="number" min="0" max="24" step=".25" placeholder="เช่น 5"><span>ชม./วัน</span></div></div>
+          <div class="pet-b full hidden"><label>ช่วงที่สัตว์เลี้ยงมัก active และพร้อมมีปฏิสัมพันธ์ <span class="help-dot" title="จำนวนชั่วโมงที่สัตว์ตื่นตัวและพร้อมเล่น เดิน หรือมีปฏิสัมพันธ์">?</span></label>
+<div class="variable-help"><b>ความหมาย:</b> เวลาที่สัตว์พร้อมเล่นหรือทำกิจกรรม ไม่ใช่เวลาตื่นทั้งหมด<br><b>ตัวอย่าง:</b> สุนัขตื่นหลายช่วง แต่พร้อมเล่นจริงรวมประมาณ 3 ชม./วัน → กรอก 3</div><div class="unit"><input id="b_pet_active" type="number" min="0" max="24" step=".25" placeholder="เช่น 5"><span>ชม./วัน</span></div></div>
         </div>
       </div>
     </div>
@@ -266,8 +328,10 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
   <section class="card" data-step="4">
     <div class="card-head"><div class="step">4</div><div><h2>Days together</h2><p>ระบุด้วยจำนวนวันจริง</p></div></div>
     <div class="card-body grid">
-      <div><label>วันที่มักอยู่/พบกันในสัปดาห์ปกติ</label><div class="unit"><input id="common_days_week" type="number" min="0" max="7" step=".5" placeholder="เช่น 5" data-required><span>วัน/สัปดาห์</span></div></div>
-      <div><label>วันหยุด/วันพิเศษที่ตั้งใจใช้ร่วมกัน</label><div class="unit"><input id="special_days_year" type="number" min="0" max="365" placeholder="เช่น 18"><span>วัน/ปี</span></div></div>
+      <div><label>วันที่มักอยู่/พบกันในสัปดาห์ปกติ <span class="help-dot" title="จำนวนวันที่โดยทั่วไปมีโอกาสอยู่ในสถานที่เดียวกันหรือพบกัน">?</span></label>
+<div class="variable-help"><b>ความหมาย:</b> นับเฉพาะวันที่มีโอกาสพบ/อยู่ร่วมกันจริง ไม่ใช่วันว่างของแต่ละคน<br><b>ตัวอย่าง:</b> อยู่บ้านเดียวกันจันทร์–ศุกร์ → 5 วัน/สัปดาห์</div><div class="unit"><input id="common_days_week" type="number" min="0" max="7" step=".5" placeholder="เช่น 5" data-required><span>วัน/สัปดาห์</span></div></div>
+      <div><label>วันหยุด/วันพิเศษที่ตั้งใจใช้ร่วมกัน <span class="help-dot" title="วันพิเศษเพิ่มเติมนอกเหนือจากสัปดาห์ปกติ">?</span></label>
+<div class="variable-help"><b>ความหมาย:</b> วันเที่ยว วันหยุดยาว ลาพักร้อนพร้อมกัน หรือวันพิเศษที่มีเวลาร่วมมากกว่าปกติ<br><b>ตัวอย่าง:</b> เที่ยว 6 วัน + ปีใหม่ 4 วัน → 10 วัน/ปี</div><div class="unit"><input id="special_days_year" type="number" min="0" max="365" placeholder="เช่น 18"><span>วัน/ปี</span></div></div>
       <div><label>ช่วงที่อยู่ไกลกัน</label><div class="unit"><input id="apart_days_year" type="number" min="0" max="365" placeholder="เช่น เดินทางต่างจังหวัด 20"><span>วัน/ปี</span></div></div>
       <div><label>วันที่ต้องดูแลกันเป็นพิเศษ</label><div class="unit"><input id="care_days_year" type="number" min="0" max="365" placeholder="เช่น 12"><span>วัน/ปี</span></div></div>
     </div>
@@ -276,8 +340,10 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
   <section class="card" data-step="5">
     <div class="card-head"><div class="step">5</div><div><h2>Quality time</h2><p>ใช้จำนวนชั่วโมงที่นึกภาพได้จริง โดยระบบคำนวณสัดส่วนให้เอง</p></div></div>
     <div class="card-body grid">
-      <div><label>เวลาที่ตั้งใจมีปฏิสัมพันธ์กันในวันปกติ</label><div class="unit"><input id="quality_normal" type="number" min="0" max="24" step=".25" placeholder="เช่น 2"><span>ชม./วัน</span></div></div>
-      <div><label>เวลาที่ตั้งใจมีปฏิสัมพันธ์กันในวันหยุด/วันพิเศษ</label><div class="unit"><input id="quality_special" type="number" min="0" max="24" step=".25" placeholder="เช่น 7"><span>ชม./วัน</span></div></div>
+      <div><label>เวลาที่ตั้งใจมีปฏิสัมพันธ์กันในวันปกติ <span class="help-dot" title="ชั่วโมงที่ทำกิจกรรมร่วมกันจริง ไม่ใช่แค่อยู่ในบ้านเดียวกัน">?</span></label>
+<div class="variable-help"><b>ความหมาย:</b> เวลาคุย เล่น กินข้าว ดูหนัง ออกกำลังกาย หรือทำกิจกรรมร่วมกันจริง<br><b>ตัวอย่าง:</b> กลับบ้านแล้วกินข้าวและคุยกันรวม 1.5 ชม. → กรอก 1.5</div><div class="unit"><input id="quality_normal" type="number" min="0" max="24" step=".25" placeholder="เช่น 2"><span>ชม./วัน</span></div></div>
+      <div><label>เวลาที่ตั้งใจมีปฏิสัมพันธ์กันในวันหยุด/วันพิเศษ <span class="help-dot" title="ชั่วโมง Quality Time ในวันที่มีเวลาร่วมมากกว่าวันปกติ">?</span></label>
+<div class="variable-help"><b>ความหมาย:</b> ใช้สำหรับวันหยุด เที่ยว หรือวันที่อยู่ด้วยกันนานกว่าปกติ<br><b>ตัวอย่าง:</b> วันอาทิตย์ใช้เวลาด้วยกันจริงประมาณ 6 ชม. → กรอก 6</div><div class="unit"><input id="quality_special" type="number" min="0" max="24" step=".25" placeholder="เช่น 7"><span>ชม./วัน</span></div></div>
       <div class="full note">สำหรับสัตว์เลี้ยง Quality Time อาจหมายถึง เล่น เดินเล่น ฝึก อาบน้ำ แปรงขน ให้อาหาร นั่งอยู่ด้วยกัน หรือกิจกรรมอื่นที่เป็นปฏิสัมพันธ์โดยตรง</div>
     </div>
   </section>
@@ -285,8 +351,10 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
   <section class="card" data-step="6">
     <div class="card-head"><div class="step">6</div><div><h2>Future changes</h2><p>ใส่เฉพาะสิ่งที่คิดว่าจะเปลี่ยนจริง ไม่ต้องเดาทุกอย่างล่วงหน้า</p></div></div>
     <div class="card-body grid">
-      <div><label>อีกกี่ปีรูปแบบชีวิตจะเปลี่ยนอย่างมีนัยสำคัญ</label><div class="unit"><input id="change_after" type="number" min="0" max="100" placeholder="เช่น 10"><span>ปี</span></div></div>
-      <div><label>หลังจากนั้น เวลาที่มีภาระต่อวันเปลี่ยนไปเท่าไร</label><div class="unit"><input id="burden_change" type="number" min="-12" max="12" step=".25" placeholder="เช่น ลดลง 2 ให้กรอก -2"><span>ชม./วัน</span></div></div>
+      <div><label>อีกกี่ปีรูปแบบชีวิตจะเปลี่ยนอย่างมีนัยสำคัญ <span class="help-dot" title="ปีที่เริ่มใช้สมมติฐานรูปแบบชีวิตใหม่">?</span></label>
+<div class="variable-help"><b>ความหมาย:</b> จุดเริ่มต้นของ Scenario ใหม่ เช่น ย้ายงาน เกษียณ ลูกโต หรือ WFH มากขึ้น<br><b>ตัวอย่าง:</b> คาดว่าอีก 5 ปีจะย้ายกลับบ้าน → กรอก 5</div><div class="unit"><input id="change_after" type="number" min="0" max="100" placeholder="เช่น 10"><span>ปี</span></div></div>
+      <div><label>หลังจากนั้น เวลาที่มีภาระต่อวันเปลี่ยนไปเท่าไร <span class="help-dot" title="ใส่ค่าบวกเมื่อภาระมากขึ้น และค่าลบเมื่อภาระลดลง">?</span></label>
+<div class="variable-help"><b>ความหมาย:</b> ชั่วโมงภาระต่อวันที่เพิ่มหรือลดจากปัจจุบัน<br><b>ตัวอย่าง:</b> WFH ทำให้เดินทางลด 2 ชม./วัน → กรอก -2</div><div class="unit"><input id="burden_change" type="number" min="-12" max="12" step=".25" placeholder="เช่น ลดลง 2 ให้กรอก -2"><span>ชม./วัน</span></div></div>
       <div><label>อีกกี่ปีมีโอกาสเกษียณ/หยุดงานหลัก</label><div class="unit"><input id="retire_after" type="number" min="0" max="100" placeholder="ถ้าเกี่ยวข้อง เช่น 25"><span>ปี</span></div></div>
       <div><label>หมายเหตุ Scenario</label><input id="scenario_note" placeholder="เช่น ย้ายกลับบ้าน, เปิดธุรกิจ, ลูกโต, WFH มากขึ้น"></div>
     </div>
@@ -363,6 +431,14 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
       <tr><th>5. Percentage</th><td>ผู้ใช้ไม่ต้องเดาเปอร์เซ็นต์ ระบบคำนวณ Quality / Shared จากชั่วโมงที่ได้โดยตรง</td></tr>
     </tbody></table></div>
     <div class="p-call">สำหรับสัตว์เลี้ยง ระบบใช้ Planning Horizon ที่ผู้ใช้กำหนดเอง ไม่ใช้การเดาอายุขัยอัตโนมัติ เพราะอายุและสุขภาพจริงแตกต่างกันตามชนิด พันธุ์ และแต่ละตัว</div>
+    <div class="p-sec"><h2>Field guide & examples</h2><table class="p-table"><tbody>
+      <tr><th style="width:34%">Planning horizon</th><td>จำนวนปีที่ต้องการใช้เป็นกรอบวิเคราะห์ เช่น 10 = วิเคราะห์ 10 ปีข้างหน้า</td></tr>
+      <tr><th>Days together</th><td>จำนวนวันที่มีโอกาสพบหรืออยู่ร่วมกันจริง เช่น อยู่บ้านเดียวกันจันทร์–ศุกร์ = 5 วัน/สัปดาห์</td></tr>
+      <tr><th>Shared presence</th><td>เวลาที่มีโอกาสอยู่ร่วมกัน แต่ยังไม่จำเป็นต้องเป็น Quality Time</td></tr>
+      <tr><th>Quality time</th><td>เวลาที่มีปฏิสัมพันธ์กันจริง เช่น กินข้าว คุย เล่น เดินเล่น ดูหนัง หรือทำกิจกรรมร่วมกัน</td></tr>
+      <tr><th>Burden change</th><td>ค่าบวก = ภาระมากขึ้น, ค่าลบ = ภาระลดลง เช่น WFH ลด commute 2 ชม./วัน → -2</td></tr>
+      <tr><th>Pet active time</th><td>ชั่วโมงที่สัตว์พร้อมมีปฏิสัมพันธ์ เช่น เล่น เดิน ฝึก หรือทำกิจกรรมร่วมกัน ไม่ใช่เวลาตื่นทั้งหมด</td></tr>
+    </tbody></table></div>
     <div class="p-sec" style="margin-top:5mm"><h2>Pet-age methodology</h2><table class="p-table"><tbody>
       <tr><th style="width:34%">สุนัข</th><td>Life Stage ปรับตามพันธุ์/ขนาดและช่วงอายุอ้างอิง; Senior = 25% สุดท้ายของ estimated lifespan ตามแนวคิด AAHA</td></tr>
       <tr><th>Labrador epigenetic</th><td>Human age ≈ 16 × ln(dog age) + 31 จากงาน DNA methylome; แสดงเฉพาะ Labrador Retriever</td></tr>
@@ -487,6 +563,11 @@ function refreshPetAgePanels(){
  ["a","b"].forEach(p=>{$(p+"_pet_age_panel").classList.toggle("hidden",v(p+"_entity")!=="pet");$(p+"_pet_age_result").innerHTML=v(p+"_entity")==="pet"?petAgeResultHTML(p):'<div class="hint">Profile นี้ไม่ใช่สัตว์เลี้ยง</div>'})
 }
 
+function toggleGuide(){
+  const el=$("guideBody");
+  el.classList.toggle("guide-hidden");
+}
+
 function renderProfile(p){
   const ent=v(p+"_entity");
   document.querySelectorAll(".human-"+p).forEach(e=>e.classList.toggle("hidden",ent!=="human"));
@@ -547,7 +628,9 @@ function weeklyBurden(p){
 function availableDaily(p,yearIndex){
   let avail=awakeHours(p);
   if(v(p+"_entity")==="pet"){
-    avail-=n(p+"_pet_alone");
+    // pet_active already means "hours per day the pet is active/available for interaction".
+    // Do not subtract pet_alone here; otherwise a pet active 2h/day and alone 12h/day becomes 0h,
+    // even on days the two profiles are actually together.
     return Math.max(0,avail);
   }
   avail-=weeklyBurden(p)/7;
@@ -623,7 +706,47 @@ function updateProgress(){
   let lv=1;for(let s=1;s<=6;s++){const r=[...document.querySelectorAll(`[data-step="${s}"] [data-required]`)].filter(e=>!e.closest(".hidden"));if(!r.length||r.every(e=>e.value!==""))lv=s+1;else break}
   $("progressLabel").textContent=`Level ${lv} of 7`;document.querySelectorAll(".level").forEach(e=>e.classList.toggle("active",+e.dataset.l<=lv));
 }
+
+function saveForm(){
+  const data={};
+  document.querySelectorAll("input,select").forEach(el=>{
+    if(!el.id) return;
+    data[el.id]=el.type==="checkbox"?el.checked:el.value;
+  });
+  localStorage.setItem("lifeTogetherPlannerV4Data",JSON.stringify(data));
+}
+function restoreForm(){
+  try{
+    const data=JSON.parse(localStorage.getItem("lifeTogetherPlannerV4Data")||"null");
+    if(!data) return;
+    ["a","b"].forEach(p=>{
+      if(data[p+"_entity"]!==undefined) $(p+"_entity").value=data[p+"_entity"];
+      renderProfile(p);
+      if(data[p+"_species"]!==undefined) $(p+"_species").value=data[p+"_species"];
+      if(data[p+"_species"]){
+        renderPetBreed(p);
+        if(data[p+"_breed"]!==undefined) $(p+"_breed").value=data[p+"_breed"];
+        updatePetReference(p);
+      }
+      if(data[p+"_lifestyle"]!==undefined) $(p+"_lifestyle").value=data[p+"_lifestyle"];
+      if(data[p+"_lifestyle"]){
+        renderLifestyle(p);
+      }
+    });
+    Object.entries(data).forEach(([id,val])=>{
+      const el=$(id);
+      if(!el) return;
+      if(el.type==="checkbox") el.checked=!!val;
+      else el.value=val;
+    });
+    ["a","b"].forEach(p=>{
+      if(v(p+"_entity")==="pet"){ updatePetReference(p); }
+    });
+  }catch(e){ console.warn("Could not restore saved form",e); }
+}
+
 function clearForm(){
+  localStorage.removeItem("lifeTogetherPlannerV4Data");
   document.querySelectorAll("input").forEach(e=>e.value="");
   document.querySelectorAll("select").forEach(e=>e.selectedIndex=0);
   ["a","b"].forEach(p=>{renderProfile(p);$(p+"_dynamic").innerHTML="";$(p+"_breed").innerHTML='<option value="">เลือกชนิดสัตว์ก่อน</option>';$(p+"_pet_ref").textContent="เลือกชนิดและพันธุ์เพื่อดูช่วงอายุอ้างอิงและวิธีคำนวณ";document.querySelectorAll(".custom-life-"+p).forEach(e=>e.classList.add("hidden"))});
@@ -632,10 +755,17 @@ function clearForm(){
   calculate();window.scrollTo({top:0,behavior:"smooth"});
 }
 function printReport(){calculate();setTimeout(()=>window.print(),80)}
-document.querySelectorAll("input,select").forEach(e=>e.addEventListener("input",calculate));
-["a","b"].forEach(p=>{
-  [p+"_pet_age",p+"_life_min",p+"_life_max"].forEach(id=>{const el=$(id);if(el)el.addEventListener("input",()=>{updatePetReference(p);calculate()})});
+document.querySelectorAll("input,select").forEach(e=>{
+  e.addEventListener("input",()=>{ calculate(); saveForm(); });
+  e.addEventListener("change",()=>{ calculate(); saveForm(); });
 });
+["a","b"].forEach(p=>{
+  [p+"_pet_age",p+"_life_min",p+"_life_max"].forEach(id=>{
+    const el=$(id);
+    if(el)el.addEventListener("input",()=>{updatePetReference(p);calculate();saveForm()});
+  });
+});
+restoreForm();
 refreshPetAgePanels();
 calculate();
 </script>
