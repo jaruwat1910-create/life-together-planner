@@ -130,6 +130,21 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
 .guide-hidden{display:none}
 @media(max-width:900px){.guide-grid{grid-template-columns:1fr}}
 
+
+.stage-planner{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.stage-card{border:1px solid #dfe7f0;border-radius:14px;padding:15px;background:linear-gradient(180deg,#fff,#fbfdff)}
+.stage-card.current{border-top:4px solid var(--blue)}
+.stage-card.future{border-top:4px solid var(--purple)}
+.stage-card h3{margin:0 0 5px;font-size:15px}
+.stage-card .stage-sub{font-size:11.5px;color:#6f6f6f;margin-bottom:12px}
+.contact-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;background:#edf6fd;color:var(--blue);font-size:11px;font-weight:700;margin-bottom:10px}
+.time-summary{margin-top:10px;border:1px solid #e2e9f0;border-radius:10px;background:#f8fbfe;padding:10px 11px;font-size:12px;line-height:1.5}
+.time-summary b{color:#1f1f1f}
+.phase-result{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
+.phase-box{border-radius:10px;padding:12px;border:1px solid #e1e1e1;background:#fff}
+.phase-box b{display:block;font-size:18px;margin-top:4px}
+@media(max-width:900px){.stage-planner,.phase-result{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -326,30 +341,89 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
   </section>
 
   <section class="card" data-step="4">
-    <div class="card-head"><div class="step">4</div><div><h2>Days together</h2><p>ระบุด้วยจำนวนวันจริง</p></div></div>
-    <div class="card-body grid">
-      <div><label>วันที่มักอยู่/พบกันในสัปดาห์ปกติ <span class="help-dot" title="จำนวนวันที่โดยทั่วไปมีโอกาสอยู่ในสถานที่เดียวกันหรือพบกัน">?</span></label>
-<div class="variable-help"><b>ความหมาย:</b> นับเฉพาะวันที่มีโอกาสพบ/อยู่ร่วมกันจริง ไม่ใช่วันว่างของแต่ละคน<br><b>ตัวอย่าง:</b> อยู่บ้านเดียวกันจันทร์–ศุกร์ → 5 วัน/สัปดาห์</div><div class="unit"><input id="common_days_week" type="number" min="0" max="7" step=".5" placeholder="เช่น 5" data-required><span>วัน/สัปดาห์</span></div></div>
-      <div><label>วันหยุด/วันพิเศษที่ตั้งใจใช้ร่วมกัน <span class="help-dot" title="วันพิเศษเพิ่มเติมนอกเหนือจากสัปดาห์ปกติ">?</span></label>
-<div class="variable-help"><b>ความหมาย:</b> วันเที่ยว วันหยุดยาว ลาพักร้อนพร้อมกัน หรือวันพิเศษที่มีเวลาร่วมมากกว่าปกติ<br><b>ตัวอย่าง:</b> เที่ยว 6 วัน + ปีใหม่ 4 วัน → 10 วัน/ปี</div><div class="unit"><input id="special_days_year" type="number" min="0" max="365" placeholder="เช่น 18"><span>วัน/ปี</span></div></div>
-      <div><label>ช่วงที่อยู่ไกลกัน</label><div class="unit"><input id="apart_days_year" type="number" min="0" max="365" placeholder="เช่น เดินทางต่างจังหวัด 20"><span>วัน/ปี</span></div></div>
-      <div><label>วันที่ต้องดูแลกันเป็นพิเศษ</label><div class="unit"><input id="care_days_year" type="number" min="0" max="365" placeholder="เช่น 12"><span>วัน/ปี</span></div></div>
+    <div class="card-head"><div class="step">4</div><div><h2>Time together by life stage</h2><p>รองรับทั้งอยู่ด้วยกันจริงและคุยกันทางไกล โดยแยก “ตอนนี้” กับ “อนาคต” ออกจากกัน</p></div></div>
+    <div class="card-body">
+      <div class="stage-planner">
+
+        <div class="stage-card current">
+          <div class="contact-badge">● Current stage</div>
+          <h3>ช่วงชีวิตปัจจุบัน</h3>
+          <div class="stage-sub">เช่น ทำงานต่างจังหวัด กลับบ้านเฉพาะเสาร์–อาทิตย์ และวิดีโอคอลกันวันทำงาน</div>
+          <div class="grid">
+            <div class="full"><label>ระยะเวลาของช่วงนี้</label><div class="unit"><input id="current_stage_years" type="number" min="0" max="100" step=".1" placeholder="เช่น 5" data-required><span>ปี</span></div></div>
+
+            <div><label>วันพบกันจริง / สัปดาห์</label><div class="unit"><input id="current_inperson_days" type="number" min="0" max="7" step=".5" placeholder="เช่น 2"><span>วัน</span></div></div>
+            <div><label>เวลาอยู่ด้วยกันในวันที่พบกัน</label><div class="unit"><input id="current_inperson_hours" type="number" min="0" max="24" step=".25" placeholder="เช่น 12"><span>ชม./วัน</span></div></div>
+
+            <div><label>วันคุยทางไกล / สัปดาห์</label><div class="unit"><input id="current_remote_days" type="number" min="0" max="7" step=".5" placeholder="เช่น 5"><span>วัน</span></div></div>
+            <div><label>เวลาคุยทางไกลรวม / วัน</label><div class="unit"><input id="current_remote_hours" type="number" min="0" max="24" step=".25" placeholder="เช่น 2.5"><span>ชม./วัน</span></div>
+              <div class="hint">เช่น 17:30–19:00 = 1.5 ชม. และ 22:00–23:00 = 1 ชม. รวม 2.5 ชม.</div>
+            </div>
+
+            <div><label>วันพิเศษเพิ่มเติม / ปี</label><div class="unit"><input id="current_special_days" type="number" min="0" max="365" placeholder="เช่น ลาพักร้อนพร้อมกัน 10"><span>วัน</span></div></div>
+            <div><label>เวลาร่วมในวันพิเศษ</label><div class="unit"><input id="current_special_hours" type="number" min="0" max="24" step=".25" placeholder="เช่น 12"><span>ชม./วัน</span></div></div>
+          </div>
+          <div class="time-summary">
+            <b>ตัวอย่างสถานการณ์:</b> ทำงานต่างจังหวัด จ.–ศ. แต่ Video Call 2 ช่วงรวม 2.5 ชม./วัน และกลับบ้านเสาร์–อาทิตย์ 12 ชม./วัน
+          </div>
+        </div>
+
+        <div class="stage-card future">
+          <div class="contact-badge" style="background:#f3edfa;color:var(--purple)">◆ Future stage</div>
+          <h3>ช่วงชีวิตหลังการเปลี่ยนแปลง</h3>
+          <div class="stage-sub">เช่น ย้ายกลับมาทำงานใกล้บ้าน ได้เจอกันหลังเลิกงานทุกวัน และใช้วันหยุดร่วมกันมากขึ้น</div>
+          <div class="grid">
+            <div class="full"><label>เริ่มหลังจากช่วงปัจจุบัน</label><div class="hint">ระบบจะใช้จำนวนปีที่เหลือจาก Planning Horizon ให้อัตโนมัติ</div></div>
+
+            <div><label>วันพบกันจริง / สัปดาห์</label><div class="unit"><input id="future_inperson_days" type="number" min="0" max="7" step=".5" placeholder="เช่น 7"><span>วัน</span></div></div>
+            <div><label>เวลาร่วมในวันทำงาน</label><div class="unit"><input id="future_weekday_hours" type="number" min="0" max="24" step=".25" placeholder="เช่น 3.5"><span>ชม./วัน</span></div>
+              <div class="hint">ถ้าคาดว่า 3–4 ชม. ให้ใช้ค่ากลาง 3.5 ชม. หรือเลือกกรณีต่ำ/สูงใน Scenario comparison ภายหลัง</div>
+            </div>
+
+            <div><label>วันหยุดร่วม / สัปดาห์</label><div class="unit"><input id="future_off_days" type="number" min="0" max="7" step=".5" placeholder="เช่น 2"><span>วัน</span></div></div>
+            <div><label>เวลาร่วมในวันหยุด</label><div class="unit"><input id="future_off_hours" type="number" min="0" max="24" step=".25" placeholder="เช่น 12"><span>ชม./วัน</span></div></div>
+
+            <div><label>วันพิเศษเพิ่มเติม / ปี</label><div class="unit"><input id="future_special_days" type="number" min="0" max="365" placeholder="เช่น 12"><span>วัน</span></div></div>
+            <div><label>เวลาร่วมในวันพิเศษ</label><div class="unit"><input id="future_special_hours" type="number" min="0" max="24" step=".25" placeholder="เช่น 12"><span>ชม./วัน</span></div></div>
+          </div>
+          <div class="time-summary">
+            <b>ตัวอย่างสถานการณ์:</b> อีก 5 ปีย้ายกลับมาทำงานใกล้บ้าน → จ.–ศ. ใช้ชีวิตร่วมกันหลังเลิกงานเฉลี่ย 3.5 ชม./วัน และเสาร์–อาทิตย์ 12 ชม./วัน
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <section class="card" data-step="5">
-    <div class="card-head"><div class="step">5</div><div><h2>Quality time</h2><p>ใช้จำนวนชั่วโมงที่นึกภาพได้จริง โดยระบบคำนวณสัดส่วนให้เอง</p></div></div>
+    <div class="card-head"><div class="step">5</div><div><h2>Quality time quality factor</h2><p>เวลาที่กรอกใน Stage 4 เป็น “เวลาร่วม” อยู่แล้ว ส่วนนี้ใช้บอกว่าสัดส่วนใดเป็น Quality Time จริง</p></div></div>
     <div class="card-body grid">
-      <div><label>เวลาที่ตั้งใจมีปฏิสัมพันธ์กันในวันปกติ <span class="help-dot" title="ชั่วโมงที่ทำกิจกรรมร่วมกันจริง ไม่ใช่แค่อยู่ในบ้านเดียวกัน">?</span></label>
-<div class="variable-help"><b>ความหมาย:</b> เวลาคุย เล่น กินข้าว ดูหนัง ออกกำลังกาย หรือทำกิจกรรมร่วมกันจริง<br><b>ตัวอย่าง:</b> กลับบ้านแล้วกินข้าวและคุยกันรวม 1.5 ชม. → กรอก 1.5</div><div class="unit"><input id="quality_normal" type="number" min="0" max="24" step=".25" placeholder="เช่น 2"><span>ชม./วัน</span></div></div>
-      <div><label>เวลาที่ตั้งใจมีปฏิสัมพันธ์กันในวันหยุด/วันพิเศษ <span class="help-dot" title="ชั่วโมง Quality Time ในวันที่มีเวลาร่วมมากกว่าวันปกติ">?</span></label>
-<div class="variable-help"><b>ความหมาย:</b> ใช้สำหรับวันหยุด เที่ยว หรือวันที่อยู่ด้วยกันนานกว่าปกติ<br><b>ตัวอย่าง:</b> วันอาทิตย์ใช้เวลาด้วยกันจริงประมาณ 6 ชม. → กรอก 6</div><div class="unit"><input id="quality_special" type="number" min="0" max="24" step=".25" placeholder="เช่น 7"><span>ชม./วัน</span></div></div>
-      <div class="full note">สำหรับสัตว์เลี้ยง Quality Time อาจหมายถึง เล่น เดินเล่น ฝึก อาบน้ำ แปรงขน ให้อาหาร นั่งอยู่ด้วยกัน หรือกิจกรรมอื่นที่เป็นปฏิสัมพันธ์โดยตรง</div>
+      <div>
+        <label>เวลาทางไกลนับเป็น Quality Time หรือไม่?</label>
+        <select id="remote_quality_mode" data-required>
+          <option value="" selected disabled>เลือกตามพฤติกรรมจริง</option>
+          <option value="full">นับเต็ม — ตั้งใจคุย/วิดีโอคอลกันจริง</option>
+          <option value="half">นับครึ่ง — เปิดสายไว้แต่ไม่ได้คุยกันตลอด</option>
+          <option value="none">ไม่นับ — ใช้เฉพาะเวลาพบกันจริง</option>
+        </select>
+      </div>
+      <div>
+        <label>เวลาพบกันจริงที่กรอก เป็นเวลาร่วมจริงแค่ไหน?</label>
+        <select id="inperson_quality_mode" data-required>
+          <option value="" selected disabled>เลือกตามชีวิตจริง</option>
+          <option value="full">ส่วนใหญ่เป็นเวลาร่วมจริง</option>
+          <option value="mostly">มีเวลาส่วนตัวแทรกบ้าง</option>
+          <option value="mixed">ประมาณครึ่งหนึ่งทำกิจกรรมร่วมกัน</option>
+        </select>
+      </div>
+      <div class="full note">
+        ตัวอย่าง: ถ้าวิดีโอคอล 17:30–19:00 และ 22:00–23:00 โดยตั้งใจคุยกันจริงเกือบตลอด ให้เลือก “นับเต็ม”
+        ส่วนเสาร์–อาทิตย์ที่อยู่ด้วยกัน 12 ชั่วโมง แต่ต่างคนต่างมีเวลาส่วนตัวบางช่วง ให้เลือก “มีเวลาส่วนตัวแทรกบ้าง”
+      </div>
     </div>
   </section>
 
   <section class="card" data-step="6">
-    <div class="card-head"><div class="step">6</div><div><h2>Future changes</h2><p>ใส่เฉพาะสิ่งที่คิดว่าจะเปลี่ยนจริง ไม่ต้องเดาทุกอย่างล่วงหน้า</p></div></div>
+    <div class="card-head"><div class="step">6</div><div><h2>Additional future assumptions</h2><p>ใช้เฉพาะกรณีที่หลังจาก Stage 2 ยังมีการเปลี่ยนแปลงใหญ่อีก เช่น เกษียณ หรือเปลี่ยนงานอีกครั้ง</p></div></div>
     <div class="card-body grid">
       <div><label>อีกกี่ปีรูปแบบชีวิตจะเปลี่ยนอย่างมีนัยสำคัญ <span class="help-dot" title="ปีที่เริ่มใช้สมมติฐานรูปแบบชีวิตใหม่">?</span></label>
 <div class="variable-help"><b>ความหมาย:</b> จุดเริ่มต้นของ Scenario ใหม่ เช่น ย้ายงาน เกษียณ ลูกโต หรือ WFH มากขึ้น<br><b>ตัวอย่าง:</b> คาดว่าอีก 5 ปีจะย้ายกลับบ้าน → กรอก 5</div><div class="unit"><input id="change_after" type="number" min="0" max="100" placeholder="เช่น 10"><span>ปี</span></div></div>
@@ -425,15 +499,17 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
     <div class="p-hero"><h1>How the model works</h1><p>หลักการคำนวณเพื่อให้ตรวจสอบที่มาของตัวเลขได้</p></div>
     <div class="p-sec"><h2>Calculation logic</h2><table class="p-table"><tbody>
       <tr><th style="width:34%">1. Available hours</th><td>ประเมินชั่วโมงที่ Profile แต่ละฝั่งพร้อมมีปฏิสัมพันธ์ หลังหักการนอน งาน/เรียน ภารกิจส่วนตัว และเวลาที่อยู่ลำพัง</td></tr>
-      <tr><th>2. Shared presence</th><td>ใช้เวลาที่ต่ำกว่าของทั้งสองฝั่งเป็นเพดาน แล้วคูณด้วยจำนวนวันที่มีโอกาสพบ/อยู่ร่วมกันจริง</td></tr>
-      <tr><th>3. Quality time</th><td>คำนวณจากชั่วโมง Quality Time ที่ผู้ใช้กรอกในวันปกติและวันพิเศษ โดยจำกัดไม่ให้เกิน Shared presence</td></tr>
-      <tr><th>4. Future change</th><td>ถ้าระบุการเปลี่ยนรูปแบบชีวิต ระบบจะปรับภาระรายวันตั้งแต่ปีที่กำหนด</td></tr>
+      <tr><th>2. Shared presence</th><td>รวมทั้งเวลาที่พบกันจริงและเวลาติดต่อทางไกล เช่น Video Call โดยคำนวณแยกตาม Life Stage</td></tr>
+      <tr><th>3. Quality time</th><td>เวลาพบกันจริงและเวลาทางไกลมีน้ำหนักต่างกันตามลักษณะการใช้งานจริง เช่น Video Call ที่ตั้งใจคุยสามารถนับเต็มได้</td></tr>
+      <tr><th>4. Future stage</th><td>ระบบแยกช่วงปัจจุบันออกจากช่วงหลังการเปลี่ยนแปลง เช่น อีก 5 ปีย้ายกลับมาทำงานใกล้บ้าน</td></tr>
       <tr><th>5. Percentage</th><td>ผู้ใช้ไม่ต้องเดาเปอร์เซ็นต์ ระบบคำนวณ Quality / Shared จากชั่วโมงที่ได้โดยตรง</td></tr>
     </tbody></table></div>
     <div class="p-call">สำหรับสัตว์เลี้ยง ระบบใช้ Planning Horizon ที่ผู้ใช้กำหนดเอง ไม่ใช้การเดาอายุขัยอัตโนมัติ เพราะอายุและสุขภาพจริงแตกต่างกันตามชนิด พันธุ์ และแต่ละตัว</div>
     <div class="p-sec"><h2>Field guide & examples</h2><table class="p-table"><tbody>
       <tr><th style="width:34%">Planning horizon</th><td>จำนวนปีที่ต้องการใช้เป็นกรอบวิเคราะห์ เช่น 10 = วิเคราะห์ 10 ปีข้างหน้า</td></tr>
-      <tr><th>Days together</th><td>จำนวนวันที่มีโอกาสพบหรืออยู่ร่วมกันจริง เช่น อยู่บ้านเดียวกันจันทร์–ศุกร์ = 5 วัน/สัปดาห์</td></tr>
+      <tr><th>Current stage</th><td>ช่วงชีวิตปัจจุบัน เช่น ทำงานต่างจังหวัด 5 ปี กลับบ้านเสาร์–อาทิตย์ และ Video Call กันวันทำงาน</td></tr>
+      <tr><th>Remote time</th><td>เวลาคุยกันทางโทรศัพท์หรือ Video Call สามารถนับเป็น Quality Time ได้ หากเป็นการตั้งใจมีปฏิสัมพันธ์กันจริง</td></tr>
+      <tr><th>Future stage</th><td>ช่วงหลังการเปลี่ยนแปลง เช่น ย้ายกลับมาทำงานใกล้บ้าน แล้วมีเวลาร่วมวันทำงาน 3.5 ชม. และวันหยุด 12 ชม.</td></tr>
       <tr><th>Shared presence</th><td>เวลาที่มีโอกาสอยู่ร่วมกัน แต่ยังไม่จำเป็นต้องเป็น Quality Time</td></tr>
       <tr><th>Quality time</th><td>เวลาที่มีปฏิสัมพันธ์กันจริง เช่น กินข้าว คุย เล่น เดินเล่น ดูหนัง หรือทำกิจกรรมร่วมกัน</td></tr>
       <tr><th>Burden change</th><td>ค่าบวก = ภาระมากขึ้น, ค่าลบ = ภาระลดลง เช่น WFH ลด commute 2 ชม./วัน → -2</td></tr>
@@ -641,35 +717,74 @@ function availableDaily(p,yearIndex){
 function collectProfile(p){
   return {entity:v(p+"_entity"),name:v(p+"_name")||("Profile "+p.toUpperCase()),lifestyle:v(p+"_lifestyle"),species:v(p+"_species")};
 }
+function qualityWeight(mode,type){
+  if(type==="remote"){
+    return mode==="full"?1:mode==="half"?.5:0;
+  }
+  return mode==="full"?1:mode==="mostly"?.8:mode==="mixed"?.5:0;
+}
+function stageAnnualHours(stage){
+  if(stage==="current"){
+    const inpersonDays=n("current_inperson_days")*52.1775;
+    const remoteDays=n("current_remote_days")*52.1775;
+    const specialDays=n("current_special_days");
+    const shared =
+      inpersonDays*n("current_inperson_hours") +
+      remoteDays*n("current_remote_hours") +
+      specialDays*n("current_special_hours");
+    const quality =
+      inpersonDays*n("current_inperson_hours")*qualityWeight(v("inperson_quality_mode"),"inperson") +
+      remoteDays*n("current_remote_hours")*qualityWeight(v("remote_quality_mode"),"remote") +
+      specialDays*n("current_special_hours")*qualityWeight(v("inperson_quality_mode"),"inperson");
+    return {shared,quality};
+  }
+  const totalMeetDays=n("future_inperson_days")*52.1775;
+  const offDays=n("future_off_days")*52.1775;
+  const weekdayDays=Math.max(0,totalMeetDays-offDays);
+  const specialDays=n("future_special_days");
+  const shared =
+    weekdayDays*n("future_weekday_hours") +
+    offDays*n("future_off_hours") +
+    specialDays*n("future_special_hours");
+  const quality = shared*qualityWeight(v("inperson_quality_mode"),"inperson");
+  return {shared,quality};
+}
 function calculate(){
   refreshPetAgePanels();
   const a=collectProfile("a"),b=collectProfile("b"),h=n("horizon_years");
   if(!a.entity||!b.entity||!h){
     ["sharedYears","qualityYears","qualityRatio","horizonOut","heroYears"].forEach(id=>$(id).textContent="–");
     $("barShared").style.width="0%";$("barQuality").style.width="0%";$("labShared").textContent="–";$("labQuality").textContent="–";
-    $("insight").innerHTML="<h3>Insight</h3><p>กรอกข้อมูลพื้นฐานให้ครบเพื่อเริ่มคำนวณ</p>";
+    $("insight").innerHTML="<h3>Insight</h3><p>กรอกข้อมูลพื้นฐานและ Time together by life stage ให้ครบเพื่อเริ่มคำนวณ</p>";
     updateProgress();return;
   }
-  const commonDays=Math.min(7,n("common_days_week"));
-  const special=Math.min(365,n("special_days_year"));
-  const apart=Math.min(365,n("apart_days_year"));
-  let totalShared=0,totalQuality=0;
-  const yearsWhole=Math.floor(h),frac=h-yearsWhole;
-  const oneYear=(y,weight=1)=>{
-    const da=availableDaily("a",y),db=availableDaily("b",y),cap=Math.max(0,Math.min(da,db));
-    const commonNormal=Math.max(0,commonDays*52.1775-apart);
-    const shared=Math.max(0,(commonNormal+special)*cap);
-    const q=Math.min(shared,Math.max(0,commonNormal*n("quality_normal")+special*n("quality_special")));
-    totalShared+=shared*weight;totalQuality+=q*weight;
-  };
-  for(let y=0;y<yearsWhole;y++)oneYear(y,1);
-  if(frac>0)oneYear(yearsWhole,frac);
-  const sharedY=totalShared/YH,qualityY=totalQuality/YH,ratio=totalShared?totalQuality/totalShared*100:0;
-  $("sharedYears").textContent=fmt(sharedY,2);$("qualityYears").textContent=fmt(qualityY,2);$("qualityRatio").textContent=fmt(ratio,1)+"%";$("horizonOut").textContent=fmt(h,1);
+
+  const currentYears=Math.min(h,n("current_stage_years"));
+  const futureYears=Math.max(0,h-currentYears);
+  const cur=stageAnnualHours("current");
+  const fut=stageAnnualHours("future");
+
+  const totalShared=cur.shared*currentYears + fut.shared*futureYears;
+  const totalQuality=cur.quality*currentYears + fut.quality*futureYears;
+  const sharedY=totalShared/YH, qualityY=totalQuality/YH;
+  const ratio=totalShared?totalQuality/totalShared*100:0;
+
+  $("sharedYears").textContent=fmt(sharedY,2);
+  $("qualityYears").textContent=fmt(qualityY,2);
+  $("qualityRatio").textContent=fmt(ratio,1)+"%";
+  $("horizonOut").textContent=fmt(h,1);
   $("heroYears").textContent=fmt(qualityY,2);
-  $("barShared").style.width="100%";$("barQuality").style.width=Math.min(100,ratio)+"%";$("labShared").textContent=fmt(sharedY,2)+" ปี";$("labQuality").textContent=fmt(qualityY,2)+" ปี";
-  $("insight").innerHTML=`<h3>Insight</h3><p>ใน Planning Horizon <b>${fmt(h,1)} ปี</b> ระบบประเมิน Shared Presence ราว <b>${fmt(totalShared,0)} ชั่วโมง</b> และ Quality Time ราว <b>${fmt(totalQuality,0)} ชั่วโมง</b>.</p><p>Quality Time คิดเป็น <b>${fmt(ratio,1)}%</b> ของ Shared Presence โดยเปอร์เซ็นต์นี้เกิดจากข้อมูลชั่วโมงและวันที่กรอก ไม่ใช่ค่าที่ผู้ใช้ต้องเดาเอง</p>`;
-  fillPrint(a,b,h,totalShared,totalQuality,ratio);
+  $("barShared").style.width="100%";
+  $("barQuality").style.width=Math.min(100,ratio)+"%";
+  $("labShared").textContent=fmt(sharedY,2)+" ปี";
+  $("labQuality").textContent=fmt(qualityY,2)+" ปี";
+
+  $("insight").innerHTML=`<h3>Insight</h3>
+    <p><b>ช่วงปัจจุบัน ${fmt(currentYears,1)} ปี:</b> เวลาร่วมประมาณ ${fmt(cur.shared,0)} ชม./ปี และ Quality Time ${fmt(cur.quality,0)} ชม./ปี</p>
+    <p><b>ช่วงหลังเปลี่ยนแปลง ${fmt(futureYears,1)} ปี:</b> เวลาร่วมประมาณ ${fmt(fut.shared,0)} ชม./ปี และ Quality Time ${fmt(fut.quality,0)} ชม./ปี</p>
+    <p>รวมทั้ง Planning Horizon ${fmt(h,1)} ปี = Shared Presence <b>${fmt(totalShared,0)} ชั่วโมง</b> และ Quality Time <b>${fmt(totalQuality,0)} ชั่วโมง</b> หรือประมาณ <b>${fmt(qualityY,2)} ปีเต็ม</b></p>`;
+
+  fillPrint(a,b,h,totalShared,totalQuality,ratio,{currentYears,futureYears,cur,fut});
   updateProgress();
 }
 function row(k,val){return `<tr><th style="width:42%">${k}</th><td>${val||"–"}</td></tr>`}
@@ -687,14 +802,22 @@ function profileRows(p){
   else s+=row("อายุปัจจุบัน",n(p+"_age")?n(p+"_age")+" ปี":"–")+row("Lifestyle",v(p+"_lifestyle")||"–")+row("เวลาตื่น–นอน",(v(p+"_wake")||"–")+" – "+(v(p+"_sleep_time")||"–"))+row("ภาระเฉลี่ย",fmt(weeklyBurden(p),1)+" ชม./สัปดาห์");
   return s;
 }
-function fillPrint(a,b,h,shared,quality,ratio){
+function fillPrint(a,b,h,shared,quality,ratio,stages){
   $("pNames").textContent=`${a.name} × ${b.name}`;$("pDate").textContent=new Date().toLocaleDateString("th-TH",{year:"numeric",month:"long",day:"numeric"});
   $("pShared").textContent=fmt(shared/YH,2);$("pQuality").textContent=fmt(quality/YH,2);$("pRatio").textContent=fmt(ratio,1)+"%";$("pHorizon").textContent=fmt(h,1);
   $("pAName").textContent=a.name;$("pBName").textContent=b.name;$("pRel").textContent=v("relation")||"–";
-  $("pSummary").innerHTML=`จากข้อมูลที่กรอกสำหรับ <b>${a.name}</b> และ <b>${b.name}</b> ในช่วง ${fmt(h,1)} ปี ระบบประเมินเวลาที่มีโอกาสอยู่/พบกันประมาณ <b>${fmt(shared,0)} ชั่วโมง</b> และ Quality Time ประมาณ <b>${fmt(quality,0)} ชั่วโมง</b> หรือ ${fmt(quality/YH,2)} ปีเต็มเมื่อรวมทุกชั่วโมงเข้าด้วยกัน`;
+  $("pSummary").innerHTML=`จากข้อมูลที่กรอกสำหรับ <b>${a.name}</b> และ <b>${b.name}</b> ในช่วง ${fmt(h,1)} ปี ระบบแบ่งเป็นช่วงปัจจุบัน ${fmt(stages.currentYears,1)} ปี และช่วงหลังการเปลี่ยนแปลง ${fmt(stages.futureYears,1)} ปี รวม Shared Presence ประมาณ <b>${fmt(shared,0)} ชั่วโมง</b> และ Quality Time ประมาณ <b>${fmt(quality,0)} ชั่วโมง</b> หรือ ${fmt(quality/YH,2)} ปีเต็ม`;
   $("pOverview").innerHTML=row("Planning horizon",fmt(h,1)+" ปี")+row("Shared presence",fmt(shared,0)+" ชั่วโมง")+row("Quality time",fmt(quality,0)+" ชั่วโมง")+row("Quality / Shared",fmt(ratio,1)+"%")+row("Scenario note",v("scenario_note"));
   $("pA").innerHTML=profileRows("a");$("pB").innerHTML=profileRows("b");
-  $("pSharedInputs").innerHTML=row("ความสัมพันธ์",v("relation"))+row("วันที่พบ/อยู่ร่วมกัน",n("common_days_week")?n("common_days_week")+" วัน/สัปดาห์":"–")+row("วันพิเศษร่วมกัน",n("special_days_year")?n("special_days_year")+" วัน/ปี":"–")+row("ช่วงอยู่ไกลกัน",n("apart_days_year")?n("apart_days_year")+" วัน/ปี":"–")+row("Quality วันปกติ",n("quality_normal")?n("quality_normal")+" ชม./วัน":"–")+row("Quality วันพิเศษ",n("quality_special")?n("quality_special")+" ชม./วัน":"–");
+  $("pSharedInputs").innerHTML=
+    row("ช่วงปัจจุบัน",fmt(stages.currentYears,1)+" ปี")
+    +row("พบกันจริงช่วงปัจจุบัน",n("current_inperson_days")+" วัน/สัปดาห์ × "+n("current_inperson_hours")+" ชม./วัน")
+    +row("คุยทางไกลช่วงปัจจุบัน",n("current_remote_days")+" วัน/สัปดาห์ × "+n("current_remote_hours")+" ชม./วัน")
+    +row("ช่วงหลังการเปลี่ยนแปลง",fmt(stages.futureYears,1)+" ปี")
+    +row("เวลาร่วมวันทำงานในอนาคต",n("future_weekday_hours")+" ชม./วัน")
+    +row("วันหยุดร่วมในอนาคต",n("future_off_days")+" วัน/สัปดาห์ × "+n("future_off_hours")+" ชม./วัน")
+    +row("Remote Quality",v("remote_quality_mode")||"–")
+    +row("In-person Quality",v("inperson_quality_mode")||"–");
   let petRows="";
   ["a","b"].forEach(p=>{if(v(p+"_entity")==="pet"){const m=getPetAgeModel(p),i=petInfo(p);petRows+=row((p==="a"?"Profile A":"Profile B")+" · "+(v(p+"_name")||"สัตว์เลี้ยง"),`${PET_DB[i.species]?.label||"สัตว์เลี้ยง"} · ${i.base?.name||"กำหนดเอง"} · อายุจริง ${fmt(i.age,1)} ปี · ${m?.stage||"–"} · เทียบคน ${m?.primary!==null&&m?.primary!==undefined?fmt(m.primary,1)+" ปี":"–"}${m?.relative!==null&&m?.relative!==undefined?" · Relative "+fmt(m.relative,1)+"%":""}`)}})
   $("pPetAge").innerHTML=petRows||row("Pet Age","ไม่มี Profile ที่เป็นสัตว์เลี้ยง");
