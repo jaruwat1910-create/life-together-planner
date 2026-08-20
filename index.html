@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Life Together Planner v4 — Pet Age Intelligence</title>
+<title>Life Together Planner v4.4 — Retirement Life Stages</title>
 <style>
 :root{
   --blue:#0f6cbd;--blue2:#115ea3;--cyan:#00b7c3;--purple:#5c2d91;--pink:#d13438;
@@ -145,6 +145,20 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
 .phase-box b{display:block;font-size:18px;margin-top:4px}
 @media(max-width:900px){.stage-planner,.phase-result{grid-template-columns:1fr}}
 
+
+.retire-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+.retire-card{border:1px solid #e0e6ee;border-radius:12px;padding:13px;background:#fff}
+.retire-card h4{margin:0 0 5px;font-size:13px}
+.retire-card p{margin:0;color:#6a6a6a;font-size:11px;line-height:1.4}
+.retire-card .big{font-size:20px;font-weight:800;margin-top:7px}
+.validation{margin-top:12px;padding:10px 12px;border-radius:9px;background:#fff7e6;border:1px solid #efd28b;font-size:11.5px;color:#684d11;display:none}
+.validation.show{display:block}
+.phase-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:12px}
+.phase-table th,.phase-table td{border:1px solid #e1e5ea;padding:8px 9px;text-align:left}
+.phase-table th{background:#f4f7fa}
+@media(max-width:900px){.retire-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.retire-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -207,7 +221,12 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
           <div class="example-box"><b>ตัวอย่าง:</b> อีก 8 ปีคาดว่าเดินทางลดลง 2 ชม./วัน ให้ใส่ Change After = 8 และ Burden Change = -2</div>
         </div>
         <div class="guide-item">
-          <b>6. สัตว์เลี้ยงคำนวณอย่างไร?</b>
+          <b>6. หลังเกษียณคำนวณอย่างไร?</b>
+          <p>ระบบไม่ใช้ตารางงานเดิมลากไปจนจบ Planning Horizon แต่แบ่งช่วงที่คนหนึ่งเกษียณและทั้งคู่เกษียณออกจากกัน</p>
+          <div class="example-box"><b>ตัวอย่าง:</b> A อายุ 26 เกษียณ 55, B อายุ 24 เกษียณ 60 → จะมีช่วงที่ A เกษียณก่อน B หลายปี ก่อนเข้าสู่ Both retired</div>
+        </div>
+        <div class="guide-item">
+          <b>7. สัตว์เลี้ยงคำนวณอย่างไร?</b>
           <p>ใช้เวลาที่ Active, เวลาที่อยู่ลำพัง, วันที่มีโอกาสอยู่ด้วยกัน และ Quality Time แทนตรรกะเรื่องงาน/เกษียณ</p>
           <div class="example-box"><b>ตัวอย่าง:</b> สุนัข Active 3 ชม./วัน แต่คุณอยู่ด้วยจริง 2 วัน/สัปดาห์ ระบบจะใช้ 2 วันนั้นเป็นกรอบการคำนวณ</div>
         </div>
@@ -224,6 +243,10 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
           <div><label>ประเภท</label><select id="a_entity" data-required onchange="renderProfile('a')"><option value="" selected disabled>เลือกประเภท</option><option value="human">บุคคล</option><option value="pet">สัตว์เลี้ยง</option></select></div>
           <div><label>ชื่อ</label><input id="a_name" placeholder="เช่น Peter, คุณแม่, Momo" data-required></div>
           <div class="human-a full hidden"><label>อายุปัจจุบัน</label><div class="unit"><input id="a_age" type="number" min="0" max="120" placeholder="เช่น 26"><span>ปี</span></div></div>
+          <div class="human-a hidden"><label>อายุที่คาดว่าจะหยุดงานหลัก / เกษียณ <span class="help-dot" title="ใช้เพื่อแบ่งช่วง Both working → One retired → Both retired">?</span></label>
+            <div class="unit"><input id="a_retire_age" type="number" min="0" max="120" placeholder="เช่น 55"><span>ปี</span></div>
+            <div class="hint">ถ้าเกษียณแล้ว ให้เลือก Lifestyle = เกษียณ / ไม่ได้ทำงานแล้ว ระบบจะถือว่าเกษียณตั้งแต่ปัจจุบัน</div>
+          </div>
           <div class="pet-a hidden"><label>ชนิดสัตว์</label>
             <select id="a_species" onchange="renderPetBreed('a')">
               <option value="" selected>เลือกชนิด</option>
@@ -252,6 +275,10 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
           <div><label>ประเภท</label><select id="b_entity" data-required onchange="renderProfile('b')"><option value="" selected disabled>เลือกประเภท</option><option value="human">บุคคล</option><option value="pet">สัตว์เลี้ยง</option></select></div>
           <div><label>ชื่อ</label><input id="b_name" placeholder="เช่น Mi, คุณพ่อ, Lucky" data-required></div>
           <div class="human-b full hidden"><label>อายุปัจจุบัน</label><div class="unit"><input id="b_age" type="number" min="0" max="120" placeholder="เช่น 28"><span>ปี</span></div></div>
+          <div class="human-b hidden"><label>อายุที่คาดว่าจะหยุดงานหลัก / เกษียณ <span class="help-dot" title="ใช้เพื่อแบ่งช่วง Both working → One retired → Both retired">?</span></label>
+            <div class="unit"><input id="b_retire_age" type="number" min="0" max="120" placeholder="เช่น 55"><span>ปี</span></div>
+            <div class="hint">ถ้าเกษียณแล้ว ให้เลือก Lifestyle = เกษียณ / ไม่ได้ทำงานแล้ว ระบบจะถือว่าเกษียณตั้งแต่ปัจจุบัน</div>
+          </div>
           <div class="pet-b hidden"><label>ชนิดสัตว์</label>
             <select id="b_species" onchange="renderPetBreed('b')">
               <option value="" selected>เลือกชนิด</option>
@@ -423,17 +450,49 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
   </section>
 
   <section class="card" data-step="6">
-    <div class="card-head"><div class="step">6</div><div><h2>Additional future assumptions</h2><p>ใช้เฉพาะกรณีที่หลังจาก Stage 2 ยังมีการเปลี่ยนแปลงใหญ่อีก เช่น เกษียณ หรือเปลี่ยนงานอีกครั้ง</p></div></div>
-    <div class="card-body grid">
-      <div><label>อีกกี่ปีรูปแบบชีวิตจะเปลี่ยนอย่างมีนัยสำคัญ <span class="help-dot" title="ปีที่เริ่มใช้สมมติฐานรูปแบบชีวิตใหม่">?</span></label>
-<div class="variable-help"><b>ความหมาย:</b> จุดเริ่มต้นของ Scenario ใหม่ เช่น ย้ายงาน เกษียณ ลูกโต หรือ WFH มากขึ้น<br><b>ตัวอย่าง:</b> คาดว่าอีก 5 ปีจะย้ายกลับบ้าน → กรอก 5</div><div class="unit"><input id="change_after" type="number" min="0" max="100" placeholder="เช่น 10"><span>ปี</span></div></div>
-      <div><label>หลังจากนั้น เวลาที่มีภาระต่อวันเปลี่ยนไปเท่าไร <span class="help-dot" title="ใส่ค่าบวกเมื่อภาระมากขึ้น และค่าลบเมื่อภาระลดลง">?</span></label>
-<div class="variable-help"><b>ความหมาย:</b> ชั่วโมงภาระต่อวันที่เพิ่มหรือลดจากปัจจุบัน<br><b>ตัวอย่าง:</b> WFH ทำให้เดินทางลด 2 ชม./วัน → กรอก -2</div><div class="unit"><input id="burden_change" type="number" min="-12" max="12" step=".25" placeholder="เช่น ลดลง 2 ให้กรอก -2"><span>ชม./วัน</span></div></div>
-      <div><label>อีกกี่ปีมีโอกาสเกษียณ/หยุดงานหลัก</label><div class="unit"><input id="retire_after" type="number" min="0" max="100" placeholder="ถ้าเกี่ยวข้อง เช่น 25"><span>ปี</span></div></div>
-      <div><label>หมายเหตุ Scenario</label><input id="scenario_note" placeholder="เช่น ย้ายกลับบ้าน, เปิดธุรกิจ, ลูกโต, WFH มากขึ้น"></div>
+    <div class="card-head"><div class="step">6</div><div><h2>Retirement & later-life stages</h2><p>แยกช่วงทำงานทั้งคู่ → คนหนึ่งเกษียณ → เกษียณทั้งคู่ เพื่อไม่ลากตารางงานปัจจุบันไปจนจบชีวิต</p></div></div>
+    <div class="card-body">
+      <div class="note">
+        ระบบจะใช้ <b>อายุปัจจุบัน + อายุเกษียณของแต่ละ Profile</b> เพื่อหาจุดเปลี่ยนโดยอัตโนมัติ
+        ถ้าคนใดเลือก Lifestyle = “เกษียณ / ไม่ได้ทำงานแล้ว” จะถือว่าเกษียณตั้งแต่ปีที่ 0
+      </div>
+
+      <div class="stage-planner">
+        <div class="stage-card">
+          <div class="contact-badge">◐ One retired</div>
+          <h3>ช่วงที่คนหนึ่งเกษียณ แต่อีกคนยังทำงาน</h3>
+          <div class="stage-sub">กรอกเวลาที่คาดว่าจะใช้ร่วมกันในช่วงนี้ ไม่ต้องกรอกจำนวนปี ระบบคำนวณจากอายุเกษียณเอง</div>
+          <div class="grid">
+            <div><label>เวลาร่วมในวันทำงานของคนที่ยังทำงาน</label><div class="unit"><input id="one_retired_weekday_hours" type="number" min="0" max="24" step=".25" placeholder="เช่น 4"><span>ชม./วัน</span></div></div>
+            <div><label>จำนวนวันทำงาน / สัปดาห์</label><div class="unit"><input id="one_retired_workdays" type="number" min="0" max="7" step=".5" placeholder="เช่น 5"><span>วัน</span></div></div>
+            <div><label>เวลาร่วมในวันหยุด</label><div class="unit"><input id="one_retired_off_hours" type="number" min="0" max="24" step=".25" placeholder="เช่น 12"><span>ชม./วัน</span></div></div>
+            <div><label>จำนวนวันหยุดร่วม / สัปดาห์</label><div class="unit"><input id="one_retired_off_days" type="number" min="0" max="7" step=".5" placeholder="เช่น 2"><span>วัน</span></div></div>
+          </div>
+        </div>
+
+        <div class="stage-card">
+          <div class="contact-badge" style="background:#ecf7ee;color:var(--green)">● Both retired</div>
+          <h3>ช่วงที่ทั้งคู่เกษียณ</h3>
+          <div class="stage-sub">ไม่มีข้อจำกัดจากงานประจำแล้ว แต่ยังควรหักกิจวัตรส่วนตัว งานบ้าน งานอดิเรก หรือภาระครอบครัว</div>
+          <div class="grid">
+            <div><label>วันที่คาดว่าจะอยู่/พบกัน / สัปดาห์</label><div class="unit"><input id="both_retired_days" type="number" min="0" max="7" step=".5" placeholder="เช่น 7"><span>วัน</span></div></div>
+            <div><label>เวลาร่วมเฉลี่ย / วัน</label><div class="unit"><input id="both_retired_hours" type="number" min="0" max="24" step=".25" placeholder="เช่น 10"><span>ชม./วัน</span></div></div>
+            <div><label>วันพิเศษเพิ่มเติม / ปี</label><div class="unit"><input id="both_retired_special_days" type="number" min="0" max="365" placeholder="เช่น 20"><span>วัน</span></div></div>
+            <div><label>เวลาร่วมในวันพิเศษ</label><div class="unit"><input id="both_retired_special_hours" type="number" min="0" max="24" step=".25" placeholder="เช่น 14"><span>ชม./วัน</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="retire-grid">
+        <div class="retire-card"><h4>Current stage</h4><p>สถานการณ์วันนี้</p><div class="big" id="durCurrent">–</div></div>
+        <div class="retire-card"><h4>Future working</h4><p>หลังย้ายกลับ/เปลี่ยนงาน แต่ยังทำงานทั้งคู่</p><div class="big" id="durFutureWorking">–</div></div>
+        <div class="retire-card"><h4>One retired</h4><p>คนหนึ่งเกษียณ อีกคนยังทำงาน</p><div class="big" id="durOneRetired">–</div></div>
+        <div class="retire-card"><h4>Both retired</h4><p>ทั้งคู่เกษียณแล้ว</p><div class="big" id="durBothRetired">–</div></div>
+      </div>
+
+      <div id="validationBox" class="validation"></div>
     </div>
   </section>
-
 
   <section class="card" id="petAgeCard">
     <div class="card-head"><div class="step">🐾</div><div><h2>Pet Age Intelligence</h2><p>แยกอายุจริง ช่วงชีวิต อายุเทียบคน และอายุสัมพัทธ์ตามชนิด/พันธุ์</p></div></div>
@@ -461,11 +520,15 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
         <div class="barrow"><span>Quality time</span><div class="bar"><i id="barQuality"></i></div><b id="labQuality">–</b></div>
       </div>
       <div class="insight" id="insight"><h3>Insight</h3><p>กรอกข้อมูลเพื่อเริ่มคำนวณ</p></div>
+      <table class="phase-table">
+        <thead><tr><th>Life stage</th><th>ระยะเวลา</th><th>Shared / ปี</th><th>Quality / ปี</th><th>รวม Quality</th></tr></thead>
+        <tbody id="phaseResultBody"></tbody>
+      </table>
       <div style="display:flex;justify-content:flex-end;margin-top:15px"><button class="btn primary" onclick="printReport()">พิมพ์ / Save as PDF</button></div>
     </div>
   </section>
   <div class="footer">แบบจำลองนี้ใช้เพื่อช่วยมองภาพของเวลา ไม่ใช่การพยากรณ์อายุขัย สุขภาพ หรืออนาคต</div>
-  <div class="footer">Created by @Jaruwat Jan</div>
+  <div class="footer">Life Together Planner v4.4 · Created by @Jaruwat Jan</div>
 </main>
 
 <div class="report">
@@ -484,6 +547,10 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
     </div>
     <div class="p-sec"><h2>สรุปแบบอ่านง่าย</h2><div class="p-call" id="pSummary"></div></div>
     <div class="p-sec"><h2>ภาพรวมเวลา</h2><table class="p-table"><tbody id="pOverview"></tbody></table></div>
+    <div class="p-sec"><h2>Life-stage breakdown</h2><table class="p-table">
+      <thead><tr><th>Stage</th><th>Years</th><th>Shared / year</th><th>Quality / year</th><th>Total quality</th></tr></thead>
+      <tbody id="pStageBreakdown"></tbody>
+    </table></div>
     <div class="p-foot">รายงานนี้สร้างจากข้อมูลที่ผู้ใช้กรอก และใช้เป็น Scenario เพื่อการวางแผนเชิงเวลาเท่านั้น</div>
   </section>
 
@@ -501,7 +568,7 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
       <tr><th style="width:34%">1. Available hours</th><td>ประเมินชั่วโมงที่ Profile แต่ละฝั่งพร้อมมีปฏิสัมพันธ์ หลังหักการนอน งาน/เรียน ภารกิจส่วนตัว และเวลาที่อยู่ลำพัง</td></tr>
       <tr><th>2. Shared presence</th><td>รวมทั้งเวลาที่พบกันจริงและเวลาติดต่อทางไกล เช่น Video Call โดยคำนวณแยกตาม Life Stage</td></tr>
       <tr><th>3. Quality time</th><td>เวลาพบกันจริงและเวลาทางไกลมีน้ำหนักต่างกันตามลักษณะการใช้งานจริง เช่น Video Call ที่ตั้งใจคุยสามารถนับเต็มได้</td></tr>
-      <tr><th>4. Future stage</th><td>ระบบแยกช่วงปัจจุบันออกจากช่วงหลังการเปลี่ยนแปลง เช่น อีก 5 ปีย้ายกลับมาทำงานใกล้บ้าน</td></tr>
+      <tr><th>4. Life stages</th><td>แบ่งเป็น Current → Future working → One retired → Both retired ตามอายุเกษียณของแต่ละ Profile</td></tr>
       <tr><th>5. Percentage</th><td>ผู้ใช้ไม่ต้องเดาเปอร์เซ็นต์ ระบบคำนวณ Quality / Shared จากชั่วโมงที่ได้โดยตรง</td></tr>
     </tbody></table></div>
     <div class="p-call">สำหรับสัตว์เลี้ยง ระบบใช้ Planning Horizon ที่ผู้ใช้กำหนดเอง ไม่ใช้การเดาอายุขัยอัตโนมัติ เพราะอายุและสุขภาพจริงแตกต่างกันตามชนิด พันธุ์ และแต่ละตัว</div>
@@ -718,9 +785,7 @@ function collectProfile(p){
   return {entity:v(p+"_entity"),name:v(p+"_name")||("Profile "+p.toUpperCase()),lifestyle:v(p+"_lifestyle"),species:v(p+"_species")};
 }
 function qualityWeight(mode,type){
-  if(type==="remote"){
-    return mode==="full"?1:mode==="half"?.5:0;
-  }
+  if(type==="remote") return mode==="full"?1:mode==="half"?.5:0;
   return mode==="full"?1:mode==="mostly"?.8:mode==="mixed"?.5:0;
 }
 function stageAnnualHours(stage){
@@ -738,34 +803,81 @@ function stageAnnualHours(stage){
       specialDays*n("current_special_hours")*qualityWeight(v("inperson_quality_mode"),"inperson");
     return {shared,quality};
   }
-  const totalMeetDays=n("future_inperson_days")*52.1775;
-  const offDays=n("future_off_days")*52.1775;
-  const weekdayDays=Math.max(0,totalMeetDays-offDays);
-  const specialDays=n("future_special_days");
-  const shared =
-    weekdayDays*n("future_weekday_hours") +
-    offDays*n("future_off_hours") +
-    specialDays*n("future_special_hours");
-  const quality = shared*qualityWeight(v("inperson_quality_mode"),"inperson");
-  return {shared,quality};
+  if(stage==="futureWorking"){
+    const totalMeetDays=n("future_inperson_days")*52.1775;
+    const offDays=Math.min(totalMeetDays,n("future_off_days")*52.1775);
+    const weekdayDays=Math.max(0,totalMeetDays-offDays);
+    const specialDays=n("future_special_days");
+    const shared =
+      weekdayDays*n("future_weekday_hours") +
+      offDays*n("future_off_hours") +
+      specialDays*n("future_special_hours");
+    return {shared,quality:shared*qualityWeight(v("inperson_quality_mode"),"inperson")};
+  }
+  if(stage==="oneRetired"){
+    const workDays=n("one_retired_workdays")*52.1775;
+    const offDays=n("one_retired_off_days")*52.1775;
+    const shared =
+      workDays*n("one_retired_weekday_hours") +
+      offDays*n("one_retired_off_hours");
+    return {shared,quality:shared*qualityWeight(v("inperson_quality_mode"),"inperson")};
+  }
+  const days=n("both_retired_days")*52.1775;
+  const shared=days*n("both_retired_hours") +
+    n("both_retired_special_days")*n("both_retired_special_hours");
+  return {shared,quality:shared*qualityWeight(v("inperson_quality_mode"),"inperson")};
+}
+function yearsToRetire(p){
+  if(v(p+"_entity")!=="human") return Infinity;
+  if(v(p+"_lifestyle")==="retired") return 0;
+  const age=n(p+"_age"), retire=n(p+"_retire_age");
+  if(!age || !retire) return Infinity;
+  return Math.max(0,retire-age);
+}
+function buildDurations(h){
+  const change=Math.min(h,n("current_stage_years"));
+  const ar=yearsToRetire("a"), br=yearsToRetire("b");
+  const firstRet=Math.min(ar,br), secondRet=Math.max(ar,br);
+
+  // Stage boundaries on the planning timeline.
+  const currentEnd=Math.min(change, firstRet, h);
+  const futureWorkingEnd=Math.min(firstRet,h);
+  const oneRetiredEnd=Math.min(secondRet,h);
+
+  const current=Math.max(0,currentEnd);
+  const futureWorking=Math.max(0,futureWorkingEnd-currentEnd);
+  const oneRetired=Math.max(0,oneRetiredEnd-futureWorkingEnd);
+  const bothRetired=Math.max(0,h-oneRetiredEnd);
+
+  return {current,futureWorking,oneRetired,bothRetired,ar,br,firstRet,secondRet,change};
 }
 function calculate(){
   refreshPetAgePanels();
   const a=collectProfile("a"),b=collectProfile("b"),h=n("horizon_years");
   if(!a.entity||!b.entity||!h){
     ["sharedYears","qualityYears","qualityRatio","horizonOut","heroYears"].forEach(id=>$(id).textContent="–");
+    ["durCurrent","durFutureWorking","durOneRetired","durBothRetired"].forEach(id=>{if($(id))$(id).textContent="–"});
     $("barShared").style.width="0%";$("barQuality").style.width="0%";$("labShared").textContent="–";$("labQuality").textContent="–";
-    $("insight").innerHTML="<h3>Insight</h3><p>กรอกข้อมูลพื้นฐานและ Time together by life stage ให้ครบเพื่อเริ่มคำนวณ</p>";
+    $("phaseResultBody").innerHTML="";
+    $("insight").innerHTML="<h3>Insight</h3><p>กรอกข้อมูลพื้นฐานและ Life Stage ให้ครบเพื่อเริ่มคำนวณ</p>";
     updateProgress();return;
   }
 
-  const currentYears=Math.min(h,n("current_stage_years"));
-  const futureYears=Math.max(0,h-currentYears);
+  const d=buildDurations(h);
   const cur=stageAnnualHours("current");
-  const fut=stageAnnualHours("future");
+  const fut=stageAnnualHours("futureWorking");
+  const one=stageAnnualHours("oneRetired");
+  const both=stageAnnualHours("bothRetired");
 
-  const totalShared=cur.shared*currentYears + fut.shared*futureYears;
-  const totalQuality=cur.quality*currentYears + fut.quality*futureYears;
+  const phases=[
+    {key:"current",label:"Current stage",years:d.current,data:cur},
+    {key:"futureWorking",label:"Future working",years:d.futureWorking,data:fut},
+    {key:"oneRetired",label:"One retired",years:d.oneRetired,data:one},
+    {key:"bothRetired",label:"Both retired",years:d.bothRetired,data:both}
+  ];
+
+  const totalShared=phases.reduce((s,p)=>s+p.years*p.data.shared,0);
+  const totalQuality=phases.reduce((s,p)=>s+p.years*p.data.quality,0);
   const sharedY=totalShared/YH, qualityY=totalQuality/YH;
   const ratio=totalShared?totalQuality/totalShared*100:0;
 
@@ -779,12 +891,38 @@ function calculate(){
   $("labShared").textContent=fmt(sharedY,2)+" ปี";
   $("labQuality").textContent=fmt(qualityY,2)+" ปี";
 
-  $("insight").innerHTML=`<h3>Insight</h3>
-    <p><b>ช่วงปัจจุบัน ${fmt(currentYears,1)} ปี:</b> เวลาร่วมประมาณ ${fmt(cur.shared,0)} ชม./ปี และ Quality Time ${fmt(cur.quality,0)} ชม./ปี</p>
-    <p><b>ช่วงหลังเปลี่ยนแปลง ${fmt(futureYears,1)} ปี:</b> เวลาร่วมประมาณ ${fmt(fut.shared,0)} ชม./ปี และ Quality Time ${fmt(fut.quality,0)} ชม./ปี</p>
-    <p>รวมทั้ง Planning Horizon ${fmt(h,1)} ปี = Shared Presence <b>${fmt(totalShared,0)} ชั่วโมง</b> และ Quality Time <b>${fmt(totalQuality,0)} ชั่วโมง</b> หรือประมาณ <b>${fmt(qualityY,2)} ปีเต็ม</b></p>`;
+  $("durCurrent").textContent=fmt(d.current,1)+" ปี";
+  $("durFutureWorking").textContent=fmt(d.futureWorking,1)+" ปี";
+  $("durOneRetired").textContent=fmt(d.oneRetired,1)+" ปี";
+  $("durBothRetired").textContent=fmt(d.bothRetired,1)+" ปี";
 
-  fillPrint(a,b,h,totalShared,totalQuality,ratio,{currentYears,futureYears,cur,fut});
+  const warnings=[];
+  if(v("a_entity")==="human" && v("a_lifestyle")!=="retired" && (!n("a_retire_age")||n("a_retire_age")<n("a_age")))
+    warnings.push("Profile A: กรุณาตรวจอายุเกษียณ");
+  if(v("b_entity")==="human" && v("b_lifestyle")!=="retired" && (!n("b_retire_age")||n("b_retire_age")<n("b_age")))
+    warnings.push("Profile B: กรุณาตรวจอายุเกษียณ");
+  if(n("current_stage_years")>h) warnings.push("Current stage ยาวกว่า Planning Horizon ระบบจำกัดให้เท่ากับ Planning Horizon");
+  const vb=$("validationBox");
+  vb.innerHTML=warnings.join("<br>");
+  vb.classList.toggle("show",warnings.length>0);
+
+  $("phaseResultBody").innerHTML=phases.map(p=>`<tr>
+    <td>${p.label}</td>
+    <td>${fmt(p.years,1)} ปี</td>
+    <td>${fmt(p.data.shared,0)} ชม.</td>
+    <td>${fmt(p.data.quality,0)} ชม.</td>
+    <td>${fmt(p.data.quality*p.years,0)} ชม.</td>
+  </tr>`).join("");
+
+  const firstName = d.ar<=d.br ? (a.name||"Profile A") : (b.name||"Profile B");
+  const secondName = d.ar<=d.br ? (b.name||"Profile B") : (a.name||"Profile A");
+
+  $("insight").innerHTML=`<h3>Insight</h3>
+    <p>ระบบแบ่ง ${fmt(h,1)} ปีออกเป็น <b>${phases.filter(p=>p.years>0).length} Life Stages</b> แทนการใช้ตารางเดียวลากยาวถึงหลังเกษียณ</p>
+    <p>${isFinite(d.firstRet)?`<b>${firstName}</b> มีจุดเกษียณก่อนในอีกประมาณ ${fmt(d.firstRet,1)} ปี และ ${isFinite(d.secondRet)?`<b>${secondName}</b> ในอีก ${fmt(d.secondRet,1)} ปี`:"อีก Profile ยังไม่ได้ระบุอายุเกษียณ"}`:"ยังระบุอายุเกษียณไม่ครบ"}</p>
+    <p>รวม Shared Presence <b>${fmt(totalShared,0)} ชั่วโมง</b> และ Quality Time <b>${fmt(totalQuality,0)} ชั่วโมง</b> หรือ <b>${fmt(qualityY,2)} ปีเต็ม</b></p>`;
+
+  fillPrint(a,b,h,totalShared,totalQuality,ratio,{phases,d});
   updateProgress();
 }
 function row(k,val){return `<tr><th style="width:42%">${k}</th><td>${val||"–"}</td></tr>`}
@@ -806,18 +944,19 @@ function fillPrint(a,b,h,shared,quality,ratio,stages){
   $("pNames").textContent=`${a.name} × ${b.name}`;$("pDate").textContent=new Date().toLocaleDateString("th-TH",{year:"numeric",month:"long",day:"numeric"});
   $("pShared").textContent=fmt(shared/YH,2);$("pQuality").textContent=fmt(quality/YH,2);$("pRatio").textContent=fmt(ratio,1)+"%";$("pHorizon").textContent=fmt(h,1);
   $("pAName").textContent=a.name;$("pBName").textContent=b.name;$("pRel").textContent=v("relation")||"–";
-  $("pSummary").innerHTML=`จากข้อมูลที่กรอกสำหรับ <b>${a.name}</b> และ <b>${b.name}</b> ในช่วง ${fmt(h,1)} ปี ระบบแบ่งเป็นช่วงปัจจุบัน ${fmt(stages.currentYears,1)} ปี และช่วงหลังการเปลี่ยนแปลง ${fmt(stages.futureYears,1)} ปี รวม Shared Presence ประมาณ <b>${fmt(shared,0)} ชั่วโมง</b> และ Quality Time ประมาณ <b>${fmt(quality,0)} ชั่วโมง</b> หรือ ${fmt(quality/YH,2)} ปีเต็ม`;
+  $("pSummary").innerHTML=`จากข้อมูลที่กรอกสำหรับ <b>${a.name}</b> และ <b>${b.name}</b> ในช่วง ${fmt(h,1)} ปี ระบบแบ่งเป็น Current stage, Future working, One retired และ Both retired ตามอายุเกษียณของแต่ละคน รวม Shared Presence ประมาณ <b>${fmt(shared,0)} ชั่วโมง</b> และ Quality Time ประมาณ <b>${fmt(quality,0)} ชั่วโมง</b> หรือ ${fmt(quality/YH,2)} ปีเต็ม`;
   $("pOverview").innerHTML=row("Planning horizon",fmt(h,1)+" ปี")+row("Shared presence",fmt(shared,0)+" ชั่วโมง")+row("Quality time",fmt(quality,0)+" ชั่วโมง")+row("Quality / Shared",fmt(ratio,1)+"%")+row("Scenario note",v("scenario_note"));
   $("pA").innerHTML=profileRows("a");$("pB").innerHTML=profileRows("b");
   $("pSharedInputs").innerHTML=
-    row("ช่วงปัจจุบัน",fmt(stages.currentYears,1)+" ปี")
-    +row("พบกันจริงช่วงปัจจุบัน",n("current_inperson_days")+" วัน/สัปดาห์ × "+n("current_inperson_hours")+" ชม./วัน")
-    +row("คุยทางไกลช่วงปัจจุบัน",n("current_remote_days")+" วัน/สัปดาห์ × "+n("current_remote_hours")+" ชม./วัน")
-    +row("ช่วงหลังการเปลี่ยนแปลง",fmt(stages.futureYears,1)+" ปี")
-    +row("เวลาร่วมวันทำงานในอนาคต",n("future_weekday_hours")+" ชม./วัน")
-    +row("วันหยุดร่วมในอนาคต",n("future_off_days")+" วัน/สัปดาห์ × "+n("future_off_hours")+" ชม./วัน")
+    row("Current stage",fmt(stages.d.current,1)+" ปี")
+    +row("Future working",fmt(stages.d.futureWorking,1)+" ปี")
+    +row("One retired",fmt(stages.d.oneRetired,1)+" ปี")
+    +row("Both retired",fmt(stages.d.bothRetired,1)+" ปี")
+    +row("Profile A retirement",isFinite(stages.d.ar)?fmt(stages.d.ar,1)+" ปีจากปัจจุบัน":"–")
+    +row("Profile B retirement",isFinite(stages.d.br)?fmt(stages.d.br,1)+" ปีจากปัจจุบัน":"–")
     +row("Remote Quality",v("remote_quality_mode")||"–")
     +row("In-person Quality",v("inperson_quality_mode")||"–");
+  $("pStageBreakdown").innerHTML=stages.phases.map(p=>`<tr><td>${p.label}</td><td>${fmt(p.years,1)}</td><td>${fmt(p.data.shared,0)}</td><td>${fmt(p.data.quality,0)}</td><td>${fmt(p.data.quality*p.years,0)}</td></tr>`).join("");
   let petRows="";
   ["a","b"].forEach(p=>{if(v(p+"_entity")==="pet"){const m=getPetAgeModel(p),i=petInfo(p);petRows+=row((p==="a"?"Profile A":"Profile B")+" · "+(v(p+"_name")||"สัตว์เลี้ยง"),`${PET_DB[i.species]?.label||"สัตว์เลี้ยง"} · ${i.base?.name||"กำหนดเอง"} · อายุจริง ${fmt(i.age,1)} ปี · ${m?.stage||"–"} · เทียบคน ${m?.primary!==null&&m?.primary!==undefined?fmt(m.primary,1)+" ปี":"–"}${m?.relative!==null&&m?.relative!==undefined?" · Relative "+fmt(m.relative,1)+"%":""}`)}})
   $("pPetAge").innerHTML=petRows||row("Pet Age","ไม่มี Profile ที่เป็นสัตว์เลี้ยง");
