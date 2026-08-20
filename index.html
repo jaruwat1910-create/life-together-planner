@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Life Together Planner v4 — Pet Age Intelligence</title>
+<style>
+:root{
+  --blue:#0f6cbd;--blue2:#115ea3;--cyan:#00b7c3;--purple:#5c2d91;--pink:#d13438;
+  --green:#107c10;--orange:#ca5010;--yellow:#ffb900;
+  --ink:#1f1f1f;--muted:#666;--line:#d9d9d9;--bg:#f5f7fb;--card:#fff;
+  --shadow:0 12px 34px rgba(30,60,90,.10);
+}
+*{box-sizing:border-box}
+html{font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--ink);scroll-behavior:smooth}
+body{margin:0}
+button,input,select{font:inherit}
+button{cursor:pointer}
+input::placeholder{color:#9a9a9a;opacity:1}
+select:invalid{color:#8b8b8b}
+.topbar{
+ position:sticky;top:0;z-index:30;height:60px;background:rgba(255,255,255,.94);
+ backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.08);
+ display:flex;align-items:center;justify-content:space-between;padding:0 22px
+}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700}
+.mslogo{display:grid;grid-template-columns:12px 12px;grid-template-rows:12px 12px;gap:2px}
+.mslogo i:nth-child(1){background:#f25022}.mslogo i:nth-child(2){background:#7fba00}
+.mslogo i:nth-child(3){background:#00a4ef}.mslogo i:nth-child(4){background:#ffb900}
+.actions{display:flex;gap:8px}
+.btn{border:1px solid #c8c8c8;background:#fff;border-radius:7px;padding:8px 13px;font-weight:600}
+.btn:hover{background:#f3f3f3}.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.primary:hover{background:var(--blue2)}
+.shell{max-width:1220px;margin:0 auto;padding:26px 18px 60px}
+.hero{position:relative;overflow:hidden;border-radius:20px;padding:30px;background:
+ radial-gradient(circle at 85% 20%,rgba(255,255,255,.22),transparent 25%),
+ linear-gradient(135deg,#0f6cbd 0%,#00b7c3 48%,#5c2d91 100%);color:#fff;box-shadow:var(--shadow);margin-bottom:18px}
+.hero-grid{display:grid;grid-template-columns:1.5fr .7fr;gap:20px;align-items:center}
+.hero h1{font-size:34px;line-height:1.15;margin:0 0 8px}.hero p{margin:0;color:#f1f7ff;max-width:760px}
+.hero-stat{justify-self:end;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.28);border-radius:15px;padding:16px 18px;min-width:210px;text-align:center}
+.hero-stat b{display:block;font-size:30px}.hero-stat span{font-size:12px}
+.progress{background:#fff;border:1px solid #e4e4e4;border-radius:15px;padding:18px 20px;box-shadow:var(--shadow);margin-bottom:18px}
+.progress-head{display:flex;justify-content:space-between;margin-bottom:12px}
+.track{height:10px;background:#e9edf2;border-radius:999px;overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--purple));transition:.25s}
+.levels{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:12px}
+.level{border-top:3px solid #ddd;padding-top:8px;color:#888;font-size:11px}.level.active{border-color:var(--blue);color:var(--blue);font-weight:700}
+.card{background:#fff;border:1px solid #e1e1e1;border-radius:16px;box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden}
+.card-head{padding:18px 20px;border-bottom:1px solid #ececec;display:flex;gap:12px;align-items:center}
+.step{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;color:#fff;font-weight:800;background:linear-gradient(135deg,var(--blue),var(--purple))}
+.card-head h2{font-size:19px;margin:0}.card-head p{font-size:13px;color:var(--muted);margin:3px 0 0}
+.card-body{padding:20px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.profile{border:1px solid #e5e5e5;border-radius:13px;padding:16px;background:linear-gradient(180deg,#fff,#fbfcfe)}
+.profile h3{margin:0 0 13px;font-size:16px;display:flex;align-items:center;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--blue)}.profile.b .dot{background:var(--purple)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px 14px}.full{grid-column:1/-1}
+label{display:block;font-size:12.5px;font-weight:700;margin-bottom:6px}
+input,select{width:100%;height:40px;border:1px solid #bdbdbd;border-radius:7px;background:#fff;padding:7px 10px;color:var(--ink)}
+input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
+.unit{position:relative}.unit input{padding-right:70px}.unit span{position:absolute;right:10px;bottom:11px;color:#777;font-size:12px}
+.hint{font-size:11px;color:#777;line-height:1.4;margin-top:5px}
+.note{margin-top:14px;background:#f5f9fd;border-left:4px solid var(--blue);padding:10px 12px;border-radius:6px;font-size:12px;color:#555}
+.dynamic{margin-top:14px;padding-top:14px;border-top:1px dashed #d8d8d8}
+.hidden{display:none!important}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid #d9d9d9;border-radius:999px;padding:7px 10px;font-size:12px;background:#fff}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{border:1px solid #e2e2e2;border-radius:13px;padding:15px;background:linear-gradient(180deg,#fff,#fbfbfb)}
+.kpi.accent{background:linear-gradient(135deg,#edf6fd,#f7f1fb);border-color:#cadff0}
+.kpi .label{font-size:11.5px;color:var(--muted);margin-bottom:7px}.kpi .value{font-size:25px;font-weight:800}.kpi .sub{font-size:11px;color:#777;margin-top:4px}
+.chart{margin-top:16px;border:1px solid #e1e1e1;border-radius:12px;padding:16px}
+.barrow{display:grid;grid-template-columns:170px 1fr 90px;gap:10px;align-items:center;margin:10px 0;font-size:12px}
+.bar{height:12px;background:#eceff3;border-radius:999px;overflow:hidden}.bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.insight{margin-top:16px;background:linear-gradient(135deg,#f6fbff,#fbf7ff);border:1px solid #d9e8f5;border-radius:12px;padding:14px}
+.insight h3{margin:0 0 7px;font-size:15px}.insight p{margin:4px 0;font-size:12.5px;color:#555}
+.footer{text-align:center;font-size:11.5px;color:#777;margin-top:20px}
+
+.report{display:none}
+@page{size:A4 portrait;margin:11mm}
+@media print{
+  html,body{background:#fff!important}
+  .topbar,.shell{display:none!important}
+  .report{display:block!important}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .p-page{width:100%;min-height:275mm;break-after:page;page-break-after:always;overflow:visible}
+  .p-page:last-child{break-after:auto;page-break-after:auto}
+  .p-hero{
+    border-radius:5mm;padding:7mm;color:#fff;margin-bottom:5mm;
+    background:linear-gradient(135deg,#0f6cbd,#00b7c3 50%,#5c2d91);
+    break-inside:avoid;page-break-inside:avoid
+  }
+  .p-hero h1{margin:0;font-size:21pt}.p-hero p{margin:1.5mm 0 0;font-size:9pt;color:#f0f7ff}
+  .p-meta{display:flex;justify-content:space-between;font-size:8pt;margin-top:4mm;color:#eef7ff}
+  .p-title{font-size:13pt;margin:0 0 3.5mm}
+  .p-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:4mm;margin-bottom:5mm}
+  .p-kpi{border:1px solid #d4d4d4;border-radius:3mm;padding:4mm;break-inside:avoid;page-break-inside:avoid}
+  .p-kpi:nth-child(1){border-top:3px solid #0f6cbd}.p-kpi:nth-child(2){border-top:3px solid #5c2d91}
+  .p-kpi:nth-child(3){border-top:3px solid #00b7c3}.p-kpi:nth-child(4){border-top:3px solid #ffb900}
+  .p-kpi span{font-size:8.5pt;color:#666}.p-kpi b{display:block;font-size:18pt;margin-top:1mm}
+  .p-sec{margin-bottom:5mm;break-inside:avoid;page-break-inside:avoid}
+  .p-sec h2{font-size:10.8pt;margin:0 0 2mm;border-bottom:1px solid #ddd;padding-bottom:1.5mm}
+  .p-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:8.2pt}
+  .p-table th,.p-table td{border:1px solid #d9d9d9;padding:2mm 2.3mm;vertical-align:top;overflow-wrap:anywhere}
+  .p-table th{background:#f2f7fb;text-align:left}
+  .p-call{background:linear-gradient(135deg,#eef7ff,#f8f2ff);border-left:3px solid #0f6cbd;padding:3.5mm 4mm;border-radius:2mm;font-size:9pt;line-height:1.45;break-inside:avoid}
+  .p-bands{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin-bottom:5mm}
+  .p-band{padding:4mm;border-radius:3mm;color:#fff;break-inside:avoid}
+  .p-band:nth-child(1){background:linear-gradient(135deg,#0f6cbd,#3a96dd)}
+  .p-band:nth-child(2){background:linear-gradient(135deg,#00a6b4,#35c5cc)}
+  .p-band:nth-child(3){background:linear-gradient(135deg,#5c2d91,#8a5ab7)}
+  .p-band small{display:block;font-size:7.5pt;opacity:.9}.p-band b{font-size:15pt}
+  .p-foot{margin-top:4mm;padding-top:2mm;border-top:1px solid #ddd;color:#777;font-size:7.5pt}
+}
+@media(max-width:900px){
+ .hero-grid,.two,.kpis{grid-template-columns:1fr}.levels{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.hero-stat{justify-self:start}.barrow{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="mslogo"><i></i><i></i><i></i><i></i></span> Life Together Planner</div>
+  <div class="actions"><button class="btn" onclick="clearForm()">ล้างข้อมูล</button><button class="btn primary" onclick="printReport()">Export PDF</button></div>
+</header>
+
+<main class="shell">
+  <section class="hero">
+    <div class="hero-grid">
+      <div><h1>เวลาชีวิตของ “สองสิ่งมีชีวิต” ที่สำคัญต่อกัน</h1>
+      <p>ใช้ได้กับคู่รัก พ่อแม่ ลูก เพื่อน พี่น้อง เจ้าของธุรกิจ คนเกษียณ นักศึกษา ฟรีแลนซ์ หรือแม้แต่สัตว์เลี้ยง โดยระบบจะถามตามบริบทแทนการบังคับใช้แบบฟอร์มพนักงานประจำ</p></div>
+      <div class="hero-stat"><b id="heroYears">–</b><span>ปีเต็มของ Quality Time โดยประมาณ</span></div>
+    </div>
+  </section>
+
+  <section class="progress">
+    <div class="progress-head"><strong id="progressLabel">Level 1 of 7</strong><span id="progressPct">0%</span></div>
+    <div class="track"><div class="fill" id="progressFill"></div></div>
+    <div class="levels">
+      <div class="level active" data-l="1">1 · Profiles</div><div class="level" data-l="2">2 · Lifestyle</div><div class="level" data-l="3">3 · Daily life</div>
+      <div class="level" data-l="4">4 · Days together</div><div class="level" data-l="5">5 · Quality time</div><div class="level" data-l="6">6 · Future</div><div class="level" data-l="7">7 · Results</div>
+    </div>
+  </section>
+
+  <section class="card" data-step="1">
+    <div class="card-head"><div class="step">1</div><div><h2>Profiles</h2><p>เลือกก่อนว่าแต่ละฝั่งเป็นบุคคลหรือสัตว์เลี้ยง และความสัมพันธ์คืออะไร</p></div></div>
+    <div class="card-body two">
+      <div class="profile">
+        <h3><span class="dot"></span>Profile A</h3>
+        <div class="grid">
+          <div><label>ประเภท</label><select id="a_entity" data-required onchange="renderProfile('a')"><option value="" selected disabled>เลือกประเภท</option><option value="human">บุคคล</option><option value="pet">สัตว์เลี้ยง</option></select></div>
+          <div><label>ชื่อ</label><input id="a_name" placeholder="เช่น Best, คุณแม่, Momo" data-required></div>
+          <div class="human-a full hidden"><label>อายุปัจจุบัน</label><div class="unit"><input id="a_age" type="number" min="0" max="120" placeholder="เช่น 26"><span>ปี</span></div></div>
+          <div class="pet-a hidden"><label>ชนิดสัตว์</label>
+            <select id="a_species" onchange="renderPetBreed('a')">
+              <option value="" selected>เลือกชนิด</option>
+              <option value="dog">สุนัข</option>
+              <option value="cat">แมว</option>
+              <option value="rabbit">กระต่าย</option>
+              <option value="bird">นกเลี้ยง / นกแก้ว</option>
+              <option value="other">สัตว์เลี้ยงอื่น</option>
+            </select>
+          </div>
+          <div class="pet-a hidden"><label>พันธุ์ / สายพันธุ์ / ชนิดย่อย</label>
+            <select id="a_breed" onchange="updatePetReference('a')"><option value="">เลือกชนิดสัตว์ก่อน</option></select>
+          </div>
+          <div class="pet-a hidden"><label>อายุปัจจุบัน</label><div class="unit"><input id="a_pet_age" type="number" min="0" max="120" step=".1" placeholder="เช่น 4.5"><span>ปี</span></div></div>
+          <div class="pet-a hidden"><label>เพศ (ไม่บังคับ)</label>
+            <select id="a_pet_sex"><option value="">ไม่ระบุ</option><option>ผู้</option><option>เมีย</option></select>
+          </div>
+          <div class="pet-a full hidden"><div class="note" id="a_pet_ref">เลือกชนิดและพันธุ์เพื่อดูช่วงอายุอ้างอิงและวิธีคำนวณ</div></div>
+          <div class="pet-a hidden custom-life-a"><label>ช่วงอายุอ้างอิงต่ำ</label><div class="unit"><input id="a_life_min" type="number" min="1" max="120" step=".1" placeholder="เช่น 10"><span>ปี</span></div></div>
+          <div class="pet-a hidden custom-life-a"><label>ช่วงอายุอ้างอิงสูง</label><div class="unit"><input id="a_life_max" type="number" min="1" max="120" step=".1" placeholder="เช่น 15"><span>ปี</span></div></div>
+        </div>
+      </div>
+      <div class="profile b">
+        <h3><span class="dot"></span>Profile B</h3>
+        <div class="grid">
+          <div><label>ประเภท</label><select id="b_entity" data-required onchange="renderProfile('b')"><option value="" selected disabled>เลือกประเภท</option><option value="human">บุคคล</option><option value="pet">สัตว์เลี้ยง</option></select></div>
+          <div><label>ชื่อ</label><input id="b_name" placeholder="เช่น Mi, คุณพ่อ, Lucky" data-required></div>
+          <div class="human-b full hidden"><label>อายุปัจจุบัน</label><div class="unit"><input id="b_age" type="number" min="0" max="120" placeholder="เช่น 28"><span>ปี</span></div></div>
+          <div class="pet-b hidden"><label>ชนิดสัตว์</label>
+            <select id="b_species" onchange="renderPetBreed('b')">
+              <option value="" selected>เลือกชนิด</option>
+              <option value="dog">สุนัข</option>
+              <option value="cat">แมว</option>
+              <option value="rabbit">กระต่าย</option>
+              <option value="bird">นกเลี้ยง / นกแก้ว</option>
+              <option value="other">สัตว์เลี้ยงอื่น</option>
+            </select>
+          </div>
+          <div class="pet-b hidden"><label>พันธุ์ / สายพันธุ์ / ชนิดย่อย</label>
+            <select id="b_breed" onchange="updatePetReference('b')"><option value="">เลือกชนิดสัตว์ก่อน</option></select>
+          </div>
+          <div class="pet-b hidden"><label>อายุปัจจุบัน</label><div class="unit"><input id="b_pet_age" type="number" min="0" max="120" step=".1" placeholder="เช่น 4.5"><span>ปี</span></div></div>
+          <div class="pet-b hidden"><label>เพศ (ไม่บังคับ)</label>
+            <select id="b_pet_sex"><option value="">ไม่ระบุ</option><option>ผู้</option><option>เมีย</option></select>
+          </div>
+          <div class="pet-b full hidden"><div class="note" id="b_pet_ref">เลือกชนิดและพันธุ์เพื่อดูช่วงอายุอ้างอิงและวิธีคำนวณ</div></div>
+          <div class="pet-b hidden custom-life-b"><label>ช่วงอายุอ้างอิงต่ำ</label><div class="unit"><input id="b_life_min" type="number" min="1" max="120" step=".1" placeholder="เช่น 10"><span>ปี</span></div></div>
+          <div class="pet-b hidden custom-life-b"><label>ช่วงอายุอ้างอิงสูง</label><div class="unit"><input id="b_life_max" type="number" min="1" max="120" step=".1" placeholder="เช่น 15"><span>ปี</span></div></div>
+        </div>
+      </div>
+      <div class="full grid">
+        <div><label>ความสัมพันธ์</label><select id="relation" data-required><option value="" selected disabled>เลือกความสัมพันธ์</option><option>คู่รัก / คู่ชีวิต</option><option>พ่อแม่กับลูก</option><option>พี่น้อง</option><option>เพื่อน</option><option>ญาติ</option><option>คนกับสัตว์เลี้ยง</option><option>สัตว์เลี้ยงด้วยกัน</option><option>อื่น ๆ</option></select></div>
+        <div><label>ช่วงเวลาที่ต้องการจำลอง</label><div class="unit"><input id="horizon_years" type="number" min="1" max="100" placeholder="เช่น 30" data-required><span>ปี</span></div><div class="hint">ใช้เป็น Planning Horizon เท่านั้น ไม่ใช่การทำนายอายุขัย</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" data-step="2">
+    <div class="card-head"><div class="step">2</div><div><h2>Lifestyle</h2><p>คำถามจะเปลี่ยนตามรูปแบบชีวิตของแต่ละ Profile</p></div></div>
+    <div class="card-body two">
+      <div class="profile"><h3><span class="dot"></span>Profile A</h3>
+        <div id="a_life_human" class="hidden">
+          <label>รูปแบบชีวิตหลัก</label>
+          <select id="a_lifestyle" onchange="renderLifestyle('a')" data-required><option value="" selected disabled>เลือกให้ใกล้ชีวิตจริงที่สุด</option><option value="employee">พนักงานประจำ / ทำงานเป็นกะ</option><option value="business">เจ้าของธุรกิจ / Self-employed</option><option value="freelance">Freelance / ตารางไม่แน่นอน</option><option value="student">นักเรียน / นักศึกษา</option><option value="homemaker">ดูแลบ้าน / ดูแลครอบครัวเต็มเวลา</option><option value="retired">เกษียณ / ไม่ได้ทำงานแล้ว</option><option value="other">อื่น ๆ</option></select>
+          <div id="a_dynamic" class="dynamic"></div>
+        </div>
+        <div id="a_life_pet" class="hidden">
+          <div class="grid">
+            <div><label>เวลาที่อยู่ลำพังโดยเฉลี่ย</label><div class="unit"><input id="a_pet_alone" type="number" min="0" max="24" step=".25" placeholder="เช่น 6"><span>ชม./วัน</span></div></div>
+            <div><label>เวลานอน/พักรวม</label><div class="unit"><input id="a_pet_sleep" type="number" min="0" max="24" step=".25" placeholder="เช่น 12"><span>ชม./วัน</span></div></div>
+            <div class="full"><label>กิจกรรมที่ต้องมีคนดูแล</label><div class="unit"><input id="a_pet_care" type="number" min="0" max="12" step=".25" placeholder="เช่น เดินเล่น ให้อาหาร ดูแล 2"><span>ชม./วัน</span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="profile b"><h3><span class="dot"></span>Profile B</h3>
+        <div id="b_life_human" class="hidden">
+          <label>รูปแบบชีวิตหลัก</label>
+          <select id="b_lifestyle" onchange="renderLifestyle('b')" data-required><option value="" selected disabled>เลือกให้ใกล้ชีวิตจริงที่สุด</option><option value="employee">พนักงานประจำ / ทำงานเป็นกะ</option><option value="business">เจ้าของธุรกิจ / Self-employed</option><option value="freelance">Freelance / ตารางไม่แน่นอน</option><option value="student">นักเรียน / นักศึกษา</option><option value="homemaker">ดูแลบ้าน / ดูแลครอบครัวเต็มเวลา</option><option value="retired">เกษียณ / ไม่ได้ทำงานแล้ว</option><option value="other">อื่น ๆ</option></select>
+          <div id="b_dynamic" class="dynamic"></div>
+        </div>
+        <div id="b_life_pet" class="hidden">
+          <div class="grid">
+            <div><label>เวลาที่อยู่ลำพังโดยเฉลี่ย</label><div class="unit"><input id="b_pet_alone" type="number" min="0" max="24" step=".25" placeholder="เช่น 4"><span>ชม./วัน</span></div></div>
+            <div><label>เวลานอน/พักรวม</label><div class="unit"><input id="b_pet_sleep" type="number" min="0" max="24" step=".25" placeholder="เช่น 14"><span>ชม./วัน</span></div></div>
+            <div class="full"><label>กิจกรรมที่ต้องมีคนดูแล</label><div class="unit"><input id="b_pet_care" type="number" min="0" max="12" step=".25" placeholder="เช่น เล่น แปรงขน 1.5"><span>ชม./วัน</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" data-step="3">
+    <div class="card-head"><div class="step">3</div><div><h2>Daily life</h2><p>ช่วงตื่น เวลาส่วนตัว และภารกิจประจำวันที่ไม่ใช่งาน</p></div></div>
+    <div class="card-body two">
+      <div class="profile"><h3><span class="dot"></span>Profile A</h3>
+        <div class="grid">
+          <div class="human-a hidden"><label>เวลาตื่น</label><input id="a_wake" type="time"></div>
+          <div class="human-a hidden"><label>เวลาเข้านอน</label><input id="a_sleep_time" type="time"></div>
+          <div class="human-a full hidden"><label>ภารกิจส่วนตัวที่ทำคนเดียว</label><div class="unit"><input id="a_personal" type="number" min="0" max="12" step=".25" placeholder="เช่น งานบ้าน ออกกำลังกาย 2"><span>ชม./วัน</span></div></div>
+          <div class="pet-a full hidden"><label>ช่วงที่สัตว์เลี้ยงมัก active และพร้อมมีปฏิสัมพันธ์</label><div class="unit"><input id="a_pet_active" type="number" min="0" max="24" step=".25" placeholder="เช่น 6"><span>ชม./วัน</span></div></div>
+        </div>
+      </div>
+      <div class="profile b"><h3><span class="dot"></span>Profile B</h3>
+        <div class="grid">
+          <div class="human-b hidden"><label>เวลาตื่น</label><input id="b_wake" type="time"></div>
+          <div class="human-b hidden"><label>เวลาเข้านอน</label><input id="b_sleep_time" type="time"></div>
+          <div class="human-b full hidden"><label>ภารกิจส่วนตัวที่ทำคนเดียว</label><div class="unit"><input id="b_personal" type="number" min="0" max="12" step=".25" placeholder="เช่น งานบ้าน อ่านหนังสือ 1.5"><span>ชม./วัน</span></div></div>
+          <div class="pet-b full hidden"><label>ช่วงที่สัตว์เลี้ยงมัก active และพร้อมมีปฏิสัมพันธ์</label><div class="unit"><input id="b_pet_active" type="number" min="0" max="24" step=".25" placeholder="เช่น 5"><span>ชม./วัน</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" data-step="4">
+    <div class="card-head"><div class="step">4</div><div><h2>Days together</h2><p>ระบุด้วยจำนวนวันจริงแทนการเดาเปอร์เซ็นต์</p></div></div>
+    <div class="card-body grid">
+      <div><label>วันที่มักอยู่/พบกันในสัปดาห์ปกติ</label><div class="unit"><input id="common_days_week" type="number" min="0" max="7" step=".5" placeholder="เช่น 5" data-required><span>วัน/สัปดาห์</span></div></div>
+      <div><label>วันหยุด/วันพิเศษที่ตั้งใจใช้ร่วมกัน</label><div class="unit"><input id="special_days_year" type="number" min="0" max="365" placeholder="เช่น 18"><span>วัน/ปี</span></div></div>
+      <div><label>ช่วงที่อยู่ไกลกัน</label><div class="unit"><input id="apart_days_year" type="number" min="0" max="365" placeholder="เช่น เดินทางต่างจังหวัด 20"><span>วัน/ปี</span></div></div>
+      <div><label>วันที่ต้องดูแลกันเป็นพิเศษ</label><div class="unit"><input id="care_days_year" type="number" min="0" max="365" placeholder="เช่น 12"><span>วัน/ปี</span></div></div>
+    </div>
+  </section>
+
+  <section class="card" data-step="5">
+    <div class="card-head"><div class="step">5</div><div><h2>Quality time</h2><p>ใช้จำนวนชั่วโมงที่นึกภาพได้จริง โดยระบบคำนวณสัดส่วนให้เอง</p></div></div>
+    <div class="card-body grid">
+      <div><label>เวลาที่ตั้งใจมีปฏิสัมพันธ์กันในวันปกติ</label><div class="unit"><input id="quality_normal" type="number" min="0" max="24" step=".25" placeholder="เช่น 2"><span>ชม./วัน</span></div></div>
+      <div><label>เวลาที่ตั้งใจมีปฏิสัมพันธ์กันในวันหยุด/วันพิเศษ</label><div class="unit"><input id="quality_special" type="number" min="0" max="24" step=".25" placeholder="เช่น 7"><span>ชม./วัน</span></div></div>
+      <div class="full note">สำหรับสัตว์เลี้ยง Quality Time อาจหมายถึง เล่น เดินเล่น ฝึก อาบน้ำ แปรงขน ให้อาหาร นั่งอยู่ด้วยกัน หรือกิจกรรมอื่นที่เป็นปฏิสัมพันธ์โดยตรง</div>
+    </div>
+  </section>
+
+  <section class="card" data-step="6">
+    <div class="card-head"><div class="step">6</div><div><h2>Future changes</h2><p>ใส่เฉพาะสิ่งที่คิดว่าจะเปลี่ยนจริง ไม่ต้องเดาทุกอย่างล่วงหน้า</p></div></div>
+    <div class="card-body grid">
+      <div><label>อีกกี่ปีรูปแบบชีวิตจะเปลี่ยนอย่างมีนัยสำคัญ</label><div class="unit"><input id="change_after" type="number" min="0" max="100" placeholder="เช่น 10"><span>ปี</span></div></div>
+      <div><label>หลังจากนั้น เวลาที่มีภาระต่อวันเปลี่ยนไปเท่าไร</label><div class="unit"><input id="burden_change" type="number" min="-12" max="12" step=".25" placeholder="เช่น ลดลง 2 ให้กรอก -2"><span>ชม./วัน</span></div></div>
+      <div><label>อีกกี่ปีมีโอกาสเกษียณ/หยุดงานหลัก</label><div class="unit"><input id="retire_after" type="number" min="0" max="100" placeholder="ถ้าเกี่ยวข้อง เช่น 25"><span>ปี</span></div></div>
+      <div><label>หมายเหตุ Scenario</label><input id="scenario_note" placeholder="เช่น ย้ายกลับบ้าน, เปิดธุรกิจ, ลูกโต, WFH มากขึ้น"></div>
+    </div>
+  </section>
+
+
+  <section class="card" id="petAgeCard">
+    <div class="card-head"><div class="step">🐾</div><div><h2>Pet Age Intelligence</h2><p>แยกอายุจริง ช่วงชีวิต อายุเทียบคน และอายุสัมพัทธ์ตามชนิด/พันธุ์</p></div></div>
+    <div class="card-body">
+      <div class="two">
+        <div class="profile" id="a_pet_age_panel"><h3><span class="dot"></span>Profile A</h3><div id="a_pet_age_result" class="hint">เลือกเป็นสัตว์เลี้ยงเพื่อดูผล</div></div>
+        <div class="profile b" id="b_pet_age_panel"><h3><span class="dot"></span>Profile B</h3><div id="b_pet_age_result" class="hint">เลือกเป็นสัตว์เลี้ยงเพื่อดูผล</div></div>
+      </div>
+      <div class="note"><b>สำคัญ:</b> “อายุเทียบคน” เป็นแบบจำลองเพื่อช่วยเทียบช่วงชีวิต ไม่ใช่การวัด biological age จริง
+      สุนัขจะแสดงหลายวิธีแยกกัน และสูตร epigenetic จะแสดงเฉพาะ Labrador Retriever ซึ่งตรงกับประชากรในงานวิจัยต้นฉบับ</div>
+    </div>
+  </section>
+
+  <section class="card" data-step="7">
+    <div class="card-head"><div class="step">7</div><div><h2>Results</h2><p>คำนวณจากข้อมูลจริงที่กรอก และไม่เติมค่าจำลองอัตโนมัติ</p></div></div>
+    <div class="card-body">
+      <div class="kpis">
+        <div class="kpi accent"><div class="label">Shared presence</div><div class="value" id="sharedYears">–</div><div class="sub">ปีเต็ม 24 ชั่วโมง</div></div>
+        <div class="kpi"><div class="label">Quality time</div><div class="value" id="qualityYears">–</div><div class="sub">ปีเต็ม 24 ชั่วโมง</div></div>
+        <div class="kpi"><div class="label">Quality / Shared</div><div class="value" id="qualityRatio">–</div><div class="sub">ระบบคำนวณให้</div></div>
+        <div class="kpi"><div class="label">Planning horizon</div><div class="value" id="horizonOut">–</div><div class="sub">ปีตามปฏิทิน</div></div>
+      </div>
+      <div class="chart">
+        <div class="barrow"><span>เวลาร่วมที่เป็นไปได้</span><div class="bar"><i id="barShared"></i></div><b id="labShared">–</b></div>
+        <div class="barrow"><span>Quality time</span><div class="bar"><i id="barQuality"></i></div><b id="labQuality">–</b></div>
+      </div>
+      <div class="insight" id="insight"><h3>Insight</h3><p>กรอกข้อมูลเพื่อเริ่มคำนวณ</p></div>
+      <div style="display:flex;justify-content:flex-end;margin-top:15px"><button class="btn primary" onclick="printReport()">พิมพ์ / Save as PDF</button></div>
+    </div>
+  </section>
+  <div class="footer">แบบจำลองนี้ใช้เพื่อช่วยมองภาพของเวลา ไม่ใช่การพยากรณ์อายุขัย สุขภาพ หรืออนาคต</div>
+</main>
+
+<div class="report">
+  <section class="p-page">
+    <div class="p-hero"><h1>Life Together Planner</h1><p>รายงานเวลาที่มีโอกาสใช้ร่วมกันของสอง Profile</p><div class="p-meta"><span id="pNames"></span><span id="pDate"></span></div></div>
+    <div class="p-kpis">
+      <div class="p-kpi"><span>Shared presence</span><b id="pShared"></b><span>ปีเต็ม</span></div>
+      <div class="p-kpi"><span>Quality time</span><b id="pQuality"></b><span>ปีเต็ม</span></div>
+      <div class="p-kpi"><span>Quality / Shared</span><b id="pRatio"></b><span>คำนวณจากชั่วโมงที่กรอก</span></div>
+      <div class="p-kpi"><span>Planning horizon</span><b id="pHorizon"></b><span>ปีตามปฏิทิน</span></div>
+    </div>
+    <div class="p-bands">
+      <div class="p-band"><small>Profile A</small><b id="pAName"></b></div>
+      <div class="p-band"><small>Relationship</small><b id="pRel" style="font-size:11pt"></b></div>
+      <div class="p-band"><small>Profile B</small><b id="pBName"></b></div>
+    </div>
+    <div class="p-sec"><h2>สรุปแบบอ่านง่าย</h2><div class="p-call" id="pSummary"></div></div>
+    <div class="p-sec"><h2>ภาพรวมเวลา</h2><table class="p-table"><tbody id="pOverview"></tbody></table></div>
+    <div class="p-foot">รายงานนี้สร้างจากข้อมูลที่ผู้ใช้กรอก และใช้เป็น Scenario เพื่อการวางแผนเชิงเวลาเท่านั้น</div>
+  </section>
+
+  <section class="p-page">
+    <div class="p-hero"><h1>Profiles & Lifestyle</h1><p>ข้อมูลต้นทางที่ใช้ในแบบจำลอง</p></div>
+    <div class="p-sec"><h2>Profile A</h2><table class="p-table"><tbody id="pA"></tbody></table></div>
+    <div class="p-sec"><h2>Profile B</h2><table class="p-table"><tbody id="pB"></tbody></table></div>
+    <div class="p-sec"><h2>Shared life</h2><table class="p-table"><tbody id="pSharedInputs"></tbody></table></div>
+    <div class="p-sec"><h2>Pet Age Intelligence</h2><table class="p-table"><tbody id="pPetAge"></tbody></table></div>
+  </section>
+
+  <section class="p-page">
+    <div class="p-hero"><h1>How the model works</h1><p>หลักการคำนวณเพื่อให้ตรวจสอบที่มาของตัวเลขได้</p></div>
+    <div class="p-sec"><h2>Calculation logic</h2><table class="p-table"><tbody>
+      <tr><th style="width:34%">1. Available hours</th><td>ประเมินชั่วโมงที่ Profile แต่ละฝั่งพร้อมมีปฏิสัมพันธ์ หลังหักการนอน งาน/เรียน ภารกิจส่วนตัว และเวลาที่อยู่ลำพัง</td></tr>
+      <tr><th>2. Shared presence</th><td>ใช้เวลาที่ต่ำกว่าของทั้งสองฝั่งเป็นเพดาน แล้วคูณด้วยจำนวนวันที่มีโอกาสพบ/อยู่ร่วมกันจริง</td></tr>
+      <tr><th>3. Quality time</th><td>คำนวณจากชั่วโมง Quality Time ที่ผู้ใช้กรอกในวันปกติและวันพิเศษ โดยจำกัดไม่ให้เกิน Shared presence</td></tr>
+      <tr><th>4. Future change</th><td>ถ้าระบุการเปลี่ยนรูปแบบชีวิต ระบบจะปรับภาระรายวันตั้งแต่ปีที่กำหนด</td></tr>
+      <tr><th>5. Percentage</th><td>ผู้ใช้ไม่ต้องเดาเปอร์เซ็นต์ ระบบคำนวณ Quality / Shared จากชั่วโมงที่ได้โดยตรง</td></tr>
+    </tbody></table></div>
+    <div class="p-call">สำหรับสัตว์เลี้ยง ระบบใช้ Planning Horizon ที่ผู้ใช้กำหนดเอง ไม่ใช้การเดาอายุขัยอัตโนมัติ เพราะอายุและสุขภาพจริงแตกต่างกันตามชนิด พันธุ์ และแต่ละตัว</div>
+    <div class="p-sec" style="margin-top:5mm"><h2>Pet-age methodology</h2><table class="p-table"><tbody>
+      <tr><th style="width:34%">สุนัข</th><td>Life Stage ปรับตามพันธุ์/ขนาดและช่วงอายุอ้างอิง; Senior = 25% สุดท้ายของ estimated lifespan ตามแนวคิด AAHA</td></tr>
+      <tr><th>Labrador epigenetic</th><td>Human age ≈ 16 × ln(dog age) + 31 จากงาน DNA methylome; แสดงเฉพาะ Labrador Retriever</td></tr>
+      <tr><th>แมว</th><td>Life Stage ตาม AAHA/AAFP: Kitten &lt;1, Young adult 1–6, Mature adult 7–10, Senior &gt;10 ปี</td></tr>
+      <tr><th>กระต่าย</th><td>แยก small / medium / large-giant; กลุ่มขนาดมี lifespan และ senior threshold ต่างกัน</td></tr>
+      <tr><th>นก</th><td>ใช้ species-specific reference เพราะ Budgie, Cockatiel, African Grey, Macaw ฯลฯ มีช่วงชีวิตต่างกันมาก</td></tr>
+      <tr><th>เทียบคน</th><td>Heuristic/normalized comparison เท่านั้น ไม่ใช่เครื่องมือวินิจฉัยทางสัตวแพทย์</td></tr>
+    </tbody></table></div>
+    <div class="p-foot">จบรายงาน</div>
+  </section>
+</div>
+
+<script>
+const $=id=>document.getElementById(id),D=365.2425,YH=D*24;
+const n=id=>{const el=$(id);return el&&el.value!==""?(parseFloat(el.value)||0):0}
+const v=id=>{const el=$(id);return el?el.value.trim():""}
+const fmt=(x,d=2)=>new Intl.NumberFormat("th-TH",{minimumFractionDigits:d,maximumFractionDigits:d}).format(x);
+
+
+const PET_DB={
+ dog:{label:"สุนัข",breeds:{
+  chihuahua:{name:"Chihuahua",life:[14,16],size:"small"},toy_poodle:{name:"Toy Poodle",life:[14,16],size:"small"},
+  pomeranian:{name:"Pomeranian",life:[12,16],size:"small"},shih_tzu:{name:"Shih Tzu",life:[10,16],size:"small"},
+  beagle:{name:"Beagle",life:[12,15],size:"medium"},thai_ridgeback:{name:"Thai Ridgeback",life:[12,13],size:"medium"},
+  french_bulldog:{name:"French Bulldog",life:[10,12],size:"medium"},labrador:{name:"Labrador Retriever",life:[11,13],size:"large",epigenetic:true},
+  golden:{name:"Golden Retriever",life:[10,12],size:"large"},siberian:{name:"Siberian Husky",life:[12,14],size:"large"},
+  german_shepherd:{name:"German Shepherd",life:[9,13],size:"large"},great_dane:{name:"Great Dane",life:[7,10],size:"giant"},
+  mix_small:{name:"พันธุ์ผสม — ขนาดเล็ก",life:[12,16],size:"small"},mix_medium:{name:"พันธุ์ผสม — ขนาดกลาง",life:[10,14],size:"medium"},
+  mix_large:{name:"พันธุ์ผสม — ขนาดใหญ่",life:[9,12],size:"large"},mix_giant:{name:"พันธุ์ผสม — ขนาดใหญ่มาก",life:[7,10],size:"giant"},
+  custom:{name:"พันธุ์อื่น / กำหนดเอง",life:null,size:"custom"}
+ }},
+ cat:{label:"แมว",breeds:{
+  domestic:{name:"Domestic / แมวบ้าน",life:[12,18]},siamese:{name:"Siamese / วิเชียรมาศ",life:[15,20]},
+  persian:{name:"Persian",life:[12,17]},british:{name:"British Shorthair",life:[12,18]},scottish:{name:"Scottish Fold",life:[11,15]},
+  maine_coon:{name:"Maine Coon",life:[12,15]},ragdoll:{name:"Ragdoll",life:[12,18]},bengal:{name:"Bengal",life:[12,16]},
+  custom:{name:"พันธุ์อื่น / กำหนดเอง",life:null}
+ }},
+ rabbit:{label:"กระต่าย",breeds:{
+  netherland:{name:"Netherland Dwarf",life:[12,13],size:"small",senior:8},polish:{name:"Polish",life:[12,13],size:"small",senior:8},
+  dwarf_lop:{name:"Dwarf / Mini Lop",life:[9,10],size:"medium",senior:6},medium_mix:{name:"พันธุ์ขนาดกลาง",life:[9,10],size:"medium",senior:6},
+  new_zealand:{name:"New Zealand",life:[4,7],size:"large",senior:4},french_lop:{name:"French Lop",life:[4,7],size:"large",senior:4},
+  continental_giant:{name:"Continental Giant",life:[4,6],size:"giant",senior:4},custom:{name:"พันธุ์อื่น / กำหนดเอง",life:null,size:"custom"}
+ }},
+ bird:{label:"นกเลี้ยง / นกแก้ว",breeds:{
+  budgie:{name:"Budgerigar / Budgie",life:[10,15],group:"small",senior:6},lovebird:{name:"Lovebird",life:[10,20],group:"small",senior:6},
+  cockatiel:{name:"Cockatiel",life:[10,14],group:"cockatiel",senior:12},indian_ringneck:{name:"Indian Ringneck",life:[20,30],group:"medium",senior:20},
+  conure:{name:"Conure",life:[20,30],group:"medium",senior:20},african_grey:{name:"African Grey",life:[50,70],group:"large",senior:30},
+  amazon:{name:"Amazon Parrot",life:[30,50],group:"large",senior:30},macaw:{name:"Macaw",life:[50,60],group:"large",senior:30},
+  cockatoo:{name:"Cockatoo",life:[40,60],group:"large",senior:30},custom:{name:"ชนิดอื่น / กำหนดเอง",life:null,group:"custom"}
+ }},
+ other:{label:"สัตว์เลี้ยงอื่น",breeds:{custom:{name:"กำหนดเอง",life:null}}}
+};
+function petInfo(p){
+ const species=v(p+"_species"),key=v(p+"_breed"),base=PET_DB[species]?.breeds[key]||null;
+ let life=base?.life?[...base.life]:null;
+ if(!life&&n(p+"_life_min")>0&&n(p+"_life_max")>0)life=[n(p+"_life_min"),n(p+"_life_max")];
+ return {species,key,base,life,age:n(p+"_pet_age")};
+}
+function renderPetBreed(p){
+ const species=v(p+"_species"),sel=$(p+"_breed");
+ sel.innerHTML='<option value="">เลือกพันธุ์ / ชนิดย่อย</option>';
+ const db=PET_DB[species];
+ if(db)Object.entries(db.breeds).forEach(([key,b])=>{const o=document.createElement("option");o.value=key;o.textContent=b.name;sel.appendChild(o)});
+ document.querySelectorAll(".custom-life-"+p).forEach(e=>e.classList.add("hidden"));
+ updatePetReference(p);calculate();
+}
+function updatePetReference(p){
+ const info=petInfo(p),custom=info.key==="custom"||info.species==="other";
+ document.querySelectorAll(".custom-life-"+p).forEach(e=>e.classList.toggle("hidden",!custom));
+ let text="เลือกชนิดและพันธุ์เพื่อดูช่วงอายุอ้างอิงและวิธีคำนวณ";
+ if(info.base){
+   text=info.life?`${info.base.name}: ช่วงอายุอ้างอิงโดยประมาณ ${info.life[0]}–${info.life[1]} ปี`:info.base.name;
+   if(info.species==="dog")text+=` · กลุ่มขนาด ${info.base.size||"–"}`;
+   if((info.species==="rabbit"||info.species==="bird")&&info.base.senior)text+=` · Senior โดยประมาณ ${info.base.senior}+ ปี`;
+ }
+ $(p+"_pet_ref").textContent=text;refreshPetAgePanels();
+}
+function dogStage(age,mid){if(age<.75)return"Puppy";if(age<3.5)return"Young adult";if(mid&&age>=mid*.75)return"Senior";return"Mature adult"}
+function catStage(age){if(age<1)return"Kitten";if(age<7)return"Young adult";if(age<=10)return"Mature adult";return"Senior"}
+function dogHeuristic(age,size){
+ if(age<=0)return 0;if(age<=1)return age*15;if(age<=2)return 15+(age-1)*9;
+ const add={small:4,medium:5,large:6,giant:7}[size]||5;return 24+(age-2)*add
+}
+function catHeuristic(age){if(age<=0)return 0;if(age<=1)return age*15;if(age<=2)return 15+(age-1)*9;return 24+(age-2)*4}
+function normalizedEq(age,mid){return mid?age/mid*80:null}
+function getPetAgeModel(p){
+ const info=petInfo(p);if(!info.species||!info.age)return null;
+ const mid=info.life?(info.life[0]+info.life[1])/2:null;let stage="ไม่ระบุ",primary=null,methods=[];
+ if(info.species==="dog"){
+   stage=dogStage(info.age,mid);primary=dogHeuristic(info.age,info.base?.size||"medium");
+   methods.push({name:"Breed/size-adjusted heuristic",value:primary,note:"หลัง 2 ปีปรับตามกลุ่มขนาด"});
+   methods.push({name:"Traditional 7×",value:info.age*7,note:"สูตรเก่า แสดงเพื่อเปรียบเทียบเท่านั้น"});
+   if(info.base?.epigenetic&&info.age>=.15){const epi=16*Math.log(info.age)+31;methods.push({name:"Epigenetic Labrador",value:epi,note:"งาน DNA methylome ของ Labrador"});primary=epi}
+ }else if(info.species==="cat"){
+   stage=catStage(info.age);primary=catHeuristic(info.age);methods.push({name:"Cat life-stage heuristic",value:primary,note:"1 ปี≈15, 2 ปี≈24, หลังจากนั้น +4/ปี"});
+ }else if(info.species==="rabbit"){
+   stage=info.base?.senior&&info.age>=info.base.senior?"Senior":(info.age<1?"Young":"Adult");primary=normalizedEq(info.age,mid);
+   if(primary!==null)methods.push({name:"Normalized lifespan",value:primary,note:"เทียบสัดส่วน lifespan กับคน reference 80 ปี"});
+ }else if(info.species==="bird"){
+   stage=info.base?.senior&&info.age>=info.base.senior?"Senior":(info.age<1?"Juvenile":"Adult");primary=normalizedEq(info.age,mid);
+   if(primary!==null)methods.push({name:"Normalized lifespan",value:primary,note:"species-specific reference เทียบกับคน reference 80 ปี"});
+ }else{
+   stage="Custom";primary=normalizedEq(info.age,mid);if(primary!==null)methods.push({name:"Normalized lifespan",value:primary,note:"อิงช่วงอายุที่ผู้ใช้กำหนด"});
+ }
+ const relative=mid?info.age/mid*100:null;
+ const seniorStart=info.species==="dog"&&mid?mid*.75:(info.base?.senior||null);
+ return {info,mid,stage,primary,methods,relative,seniorStart};
+}
+function petAgeResultHTML(p){
+ const m=getPetAgeModel(p);if(!m)return'<div class="hint">กรอกชนิด พันธุ์ และอายุสัตว์เลี้ยงเพื่อดูผล</div>';
+ const name=m.info.base?.name||"กำหนดเอง",sp=PET_DB[m.info.species]?.label||"สัตว์เลี้ยง";
+ let h=`<div class="kpis" style="grid-template-columns:repeat(2,1fr);margin-bottom:12px">
+ <div class="kpi accent"><div class="label">อายุจริง</div><div class="value">${fmt(m.info.age,1)}</div><div class="sub">ปี</div></div>
+ <div class="kpi"><div class="label">Life stage</div><div class="value" style="font-size:18px">${m.stage}</div><div class="sub">${sp} · ${name}</div></div></div>`;
+ if(m.primary!==null)h+=`<div class="note"><b>อายุเทียบคนโดยประมาณ:</b> ${fmt(m.primary,1)} ปี</div>`;
+ if(m.relative!==null)h+=`<div class="hint" style="margin-top:8px">อายุสัมพัทธ์ต่อช่วงอายุอ้างอิงกลาง: <b>${fmt(m.relative,1)}%</b>${m.info.life?` · reference ${m.info.life[0]}–${m.info.life[1]} ปี`:""}</div>`;
+ if(m.seniorStart)h+=`<div class="hint">เริ่ม Senior โดยประมาณ: <b>${fmt(m.seniorStart,1)} ปี</b></div>`;
+ if(m.methods.length){h+=`<div style="margin-top:10px"><b style="font-size:12px">คำนวณแยกตามวิธี</b>`;m.methods.forEach(x=>h+=`<div style="margin-top:7px;border:1px solid #e5e5e5;border-radius:8px;padding:9px 10px"><b>${x.name}</b>: ${fmt(x.value,1)} ปีเทียบคน<div class="hint">${x.note}</div></div>`);h+="</div>"}
+ return h;
+}
+function refreshPetAgePanels(){
+ ["a","b"].forEach(p=>{$(p+"_pet_age_panel").classList.toggle("hidden",v(p+"_entity")!=="pet");$(p+"_pet_age_result").innerHTML=v(p+"_entity")==="pet"?petAgeResultHTML(p):'<div class="hint">Profile นี้ไม่ใช่สัตว์เลี้ยง</div>'})
+}
+
+function renderProfile(p){
+  const ent=v(p+"_entity");
+  document.querySelectorAll(".human-"+p).forEach(e=>e.classList.toggle("hidden",ent!=="human"));
+  document.querySelectorAll(".pet-"+p).forEach(e=>e.classList.toggle("hidden",ent!=="pet"));
+  $(p+"_life_human").classList.toggle("hidden",ent!=="human");
+  $(p+"_life_pet").classList.toggle("hidden",ent!=="pet");
+  if(ent!=="human") $(p+"_dynamic").innerHTML="";
+  refreshPetAgePanels();
+  calculate();
+}
+function lifestyleHTML(p,type){
+  const H=(label,id,ph,unit="ชม.")=>`<div><label>${label}</label><div class="unit"><input id="${p}_${id}" type="number" min="0" step=".25" placeholder="${ph}"><span>${unit}</span></div></div>`;
+  const T=(label,id)=>`<div><label>${label}</label><input id="${p}_${id}" type="time"></div>`;
+  if(type==="employee") return `<div class="grid">${H("วันทำงาน / สัปดาห์","workdays","เช่น 5","วัน")}${T("เริ่มงาน","work_start")}${T("เลิกงาน","work_end")}${H("เดินทางรวม / วันทำงาน","commute","เช่น 2")}${H("OT / สัปดาห์","ot","เช่น 4")}${H("WFH / สัปดาห์","wfh","เช่น 2","วัน")}</div>`;
+  if(type==="business") return `<div class="grid">${H("วันที่ต้องดูธุรกิจ / สัปดาห์","biz_days","เช่น 6","วัน")}${H("เวลางานหลัก / วัน","biz_hours","เช่น 9")}${H("งานนอกเวลา / สัปดาห์","biz_after","เช่น ตอบลูกค้า 7")}${H("เดินทาง/พบลูกค้า / สัปดาห์","biz_travel","เช่น 5")}</div>`;
+  if(type==="freelance") return `<div class="grid">${H("ชั่วโมงทำงานเฉลี่ย / สัปดาห์","free_hours","เช่น 35")}${H("วันที่ทำงาน / สัปดาห์","free_days","เช่น 5","วัน")}${H("งานฉุกเฉิน/นอกเวลา / สัปดาห์","free_extra","เช่น 3")}</div>`;
+  if(type==="student") return `<div class="grid">${H("เวลาเรียน / สัปดาห์","study_hours","เช่น 30")}${H("อ่านหนังสือ/การบ้าน / สัปดาห์","study_extra","เช่น 12")}${H("เดินทาง / สัปดาห์","study_travel","เช่น 8")}</div>`;
+  if(type==="homemaker") return `<div class="grid">${H("งานบ้าน / วัน","home_hours","เช่น 4")}${H("ดูแลลูก/ผู้สูงอายุ / วัน","care_hours","เช่น 5")}${H("ธุระนอกบ้าน / สัปดาห์","errand_hours","เช่น 6")}</div>`;
+  if(type==="retired") return `<div class="grid">${H("งานบ้าน/ดูแลครอบครัว / วัน","ret_home","เช่น 2")}${H("กิจกรรมนอกบ้าน / วัน","ret_out","เช่น 2")}${H("นัดหมาย/ธุระ / สัปดาห์","ret_errand","เช่น 4")}</div>`;
+  if(type==="other") return `<div class="grid">${H("ภาระประจำเฉลี่ย / วัน","other_daily","เช่น 6")}${H("ภาระเพิ่มเติม / สัปดาห์","other_weekly","เช่น 5")}</div>`;
+  return "";
+}
+function renderLifestyle(p){
+  $(p+"_dynamic").innerHTML=lifestyleHTML(p,v(p+"_lifestyle"));
+  $(p+"_dynamic").querySelectorAll("input").forEach(e=>e.addEventListener("input",calculate));
+  calculate();
+}
+function awakeHours(p){
+  if(v(p+"_entity")==="pet"){
+    const active=n(p+"_pet_active");
+    if(active>0)return Math.min(24,active);
+    const sleep=n(p+"_pet_sleep"); return Math.max(0,24-sleep);
+  }
+  const s=v(p+"_wake"),e=v(p+"_sleep_time");
+  if(!s||!e)return 0;
+  const [sh,sm]=s.split(":").map(Number),[eh,em]=e.split(":").map(Number);
+  let a=sh+sm/60,b=eh+em/60;if(b<a)b+=24;return Math.max(0,b-a);
+}
+function weeklyBurden(p){
+  if(v(p+"_entity")==="pet") return 0;
+  const type=v(p+"_lifestyle");
+  if(type==="employee"){
+    let wd=n(p+"_workdays"),wfh=Math.min(wd,n(p+"_wfh"));
+    let work=0;if(v(p+"_work_start")&&v(p+"_work_end")){
+      const [sh,sm]=v(p+"_work_start").split(":").map(Number),[eh,em]=v(p+"_work_end").split(":").map(Number);
+      let a=sh+sm/60,b=eh+em/60;if(b<a)b+=24;work=Math.max(0,b-a)
+    }
+    return wd*work+(wd-wfh)*n(p+"_commute")+n(p+"_ot");
+  }
+  if(type==="business")return n(p+"_biz_days")*n(p+"_biz_hours")+n(p+"_biz_after")+n(p+"_biz_travel");
+  if(type==="freelance")return n(p+"_free_hours")+n(p+"_free_extra");
+  if(type==="student")return n(p+"_study_hours")+n(p+"_study_extra")+n(p+"_study_travel");
+  if(type==="homemaker")return 7*(n(p+"_home_hours")+n(p+"_care_hours"))+n(p+"_errand_hours");
+  if(type==="retired")return 7*(n(p+"_ret_home")+n(p+"_ret_out"))+n(p+"_ret_errand");
+  if(type==="other")return 7*n(p+"_other_daily")+n(p+"_other_weekly");
+  return 0;
+}
+function availableDaily(p,yearIndex){
+  let avail=awakeHours(p);
+  if(v(p+"_entity")==="pet"){
+    avail-=n(p+"_pet_alone");
+    return Math.max(0,avail);
+  }
+  avail-=weeklyBurden(p)/7;
+  avail-=n(p+"_personal");
+  if(n("change_after")>0 && yearIndex>=n("change_after")) avail-=n("burden_change");
+  return Math.max(0,avail);
+}
+function collectProfile(p){
+  return {entity:v(p+"_entity"),name:v(p+"_name")||("Profile "+p.toUpperCase()),lifestyle:v(p+"_lifestyle"),species:v(p+"_species")};
+}
+function calculate(){
+  refreshPetAgePanels();
+  const a=collectProfile("a"),b=collectProfile("b"),h=n("horizon_years");
+  if(!a.entity||!b.entity||!h){
+    ["sharedYears","qualityYears","qualityRatio","horizonOut","heroYears"].forEach(id=>$(id).textContent="–");
+    $("barShared").style.width="0%";$("barQuality").style.width="0%";$("labShared").textContent="–";$("labQuality").textContent="–";
+    $("insight").innerHTML="<h3>Insight</h3><p>กรอกข้อมูลพื้นฐานให้ครบเพื่อเริ่มคำนวณ</p>";
+    updateProgress();return;
+  }
+  const commonDays=Math.min(7,n("common_days_week"));
+  const special=Math.min(365,n("special_days_year"));
+  const apart=Math.min(365,n("apart_days_year"));
+  let totalShared=0,totalQuality=0;
+  const yearsWhole=Math.floor(h),frac=h-yearsWhole;
+  const oneYear=(y,weight=1)=>{
+    const da=availableDaily("a",y),db=availableDaily("b",y),cap=Math.max(0,Math.min(da,db));
+    const commonNormal=Math.max(0,commonDays*52.1775-apart);
+    const shared=Math.max(0,(commonNormal+special)*cap);
+    const q=Math.min(shared,Math.max(0,commonNormal*n("quality_normal")+special*n("quality_special")));
+    totalShared+=shared*weight;totalQuality+=q*weight;
+  };
+  for(let y=0;y<yearsWhole;y++)oneYear(y,1);
+  if(frac>0)oneYear(yearsWhole,frac);
+  const sharedY=totalShared/YH,qualityY=totalQuality/YH,ratio=totalShared?totalQuality/totalShared*100:0;
+  $("sharedYears").textContent=fmt(sharedY,2);$("qualityYears").textContent=fmt(qualityY,2);$("qualityRatio").textContent=fmt(ratio,1)+"%";$("horizonOut").textContent=fmt(h,1);
+  $("heroYears").textContent=fmt(qualityY,2);
+  $("barShared").style.width="100%";$("barQuality").style.width=Math.min(100,ratio)+"%";$("labShared").textContent=fmt(sharedY,2)+" ปี";$("labQuality").textContent=fmt(qualityY,2)+" ปี";
+  $("insight").innerHTML=`<h3>Insight</h3><p>ใน Planning Horizon <b>${fmt(h,1)} ปี</b> ระบบประเมิน Shared Presence ราว <b>${fmt(totalShared,0)} ชั่วโมง</b> และ Quality Time ราว <b>${fmt(totalQuality,0)} ชั่วโมง</b>.</p><p>Quality Time คิดเป็น <b>${fmt(ratio,1)}%</b> ของ Shared Presence โดยเปอร์เซ็นต์นี้เกิดจากข้อมูลชั่วโมงและวันที่กรอก ไม่ใช่ค่าที่ผู้ใช้ต้องเดาเอง</p>`;
+  fillPrint(a,b,h,totalShared,totalQuality,ratio);
+  updateProgress();
+}
+function row(k,val){return `<tr><th style="width:42%">${k}</th><td>${val||"–"}</td></tr>`}
+function profileRows(p){
+  const ent=v(p+"_entity");
+  let s=row("ชื่อ",v(p+"_name"))+row("ประเภท",ent==="pet"?"สัตว์เลี้ยง":"บุคคล");
+  if(ent==="pet"){
+    const m=getPetAgeModel(p),info=petInfo(p);
+    s+=row("ชนิดสัตว์",PET_DB[info.species]?.label||"–")+row("พันธุ์ / ชนิดย่อย",info.base?.name||"–")
+      +row("อายุปัจจุบัน",n(p+"_pet_age")?n(p+"_pet_age")+" ปี":"–")+row("Life stage",m?.stage||"–")
+      +row("อายุเทียบคน (แบบหลัก)",m?.primary!==null&&m?.primary!==undefined?fmt(m.primary,1)+" ปี":"–")
+      +row("ช่วงอายุอ้างอิง",info.life?info.life[0]+"–"+info.life[1]+" ปี":"–")
+      +row("เวลา active",n(p+"_pet_active")?n(p+"_pet_active")+" ชม./วัน":"–")+row("เวลาอยู่ลำพัง",n(p+"_pet_alone")?n(p+"_pet_alone")+" ชม./วัน":"–");
+  }
+  else s+=row("อายุปัจจุบัน",n(p+"_age")?n(p+"_age")+" ปี":"–")+row("Lifestyle",v(p+"_lifestyle")||"–")+row("เวลาตื่น–นอน",(v(p+"_wake")||"–")+" – "+(v(p+"_sleep_time")||"–"))+row("ภาระเฉลี่ย",fmt(weeklyBurden(p),1)+" ชม./สัปดาห์");
+  return s;
+}
+function fillPrint(a,b,h,shared,quality,ratio){
+  $("pNames").textContent=`${a.name} × ${b.name}`;$("pDate").textContent=new Date().toLocaleDateString("th-TH",{year:"numeric",month:"long",day:"numeric"});
+  $("pShared").textContent=fmt(shared/YH,2);$("pQuality").textContent=fmt(quality/YH,2);$("pRatio").textContent=fmt(ratio,1)+"%";$("pHorizon").textContent=fmt(h,1);
+  $("pAName").textContent=a.name;$("pBName").textContent=b.name;$("pRel").textContent=v("relation")||"–";
+  $("pSummary").innerHTML=`จากข้อมูลที่กรอกสำหรับ <b>${a.name}</b> และ <b>${b.name}</b> ในช่วง ${fmt(h,1)} ปี ระบบประเมินเวลาที่มีโอกาสอยู่/พบกันประมาณ <b>${fmt(shared,0)} ชั่วโมง</b> และ Quality Time ประมาณ <b>${fmt(quality,0)} ชั่วโมง</b> หรือ ${fmt(quality/YH,2)} ปีเต็มเมื่อรวมทุกชั่วโมงเข้าด้วยกัน`;
+  $("pOverview").innerHTML=row("Planning horizon",fmt(h,1)+" ปี")+row("Shared presence",fmt(shared,0)+" ชั่วโมง")+row("Quality time",fmt(quality,0)+" ชั่วโมง")+row("Quality / Shared",fmt(ratio,1)+"%")+row("Scenario note",v("scenario_note"));
+  $("pA").innerHTML=profileRows("a");$("pB").innerHTML=profileRows("b");
+  $("pSharedInputs").innerHTML=row("ความสัมพันธ์",v("relation"))+row("วันที่พบ/อยู่ร่วมกัน",n("common_days_week")?n("common_days_week")+" วัน/สัปดาห์":"–")+row("วันพิเศษร่วมกัน",n("special_days_year")?n("special_days_year")+" วัน/ปี":"–")+row("ช่วงอยู่ไกลกัน",n("apart_days_year")?n("apart_days_year")+" วัน/ปี":"–")+row("Quality วันปกติ",n("quality_normal")?n("quality_normal")+" ชม./วัน":"–")+row("Quality วันพิเศษ",n("quality_special")?n("quality_special")+" ชม./วัน":"–");
+  let petRows="";
+  ["a","b"].forEach(p=>{if(v(p+"_entity")==="pet"){const m=getPetAgeModel(p),i=petInfo(p);petRows+=row((p==="a"?"Profile A":"Profile B")+" · "+(v(p+"_name")||"สัตว์เลี้ยง"),`${PET_DB[i.species]?.label||"สัตว์เลี้ยง"} · ${i.base?.name||"กำหนดเอง"} · อายุจริง ${fmt(i.age,1)} ปี · ${m?.stage||"–"} · เทียบคน ${m?.primary!==null&&m?.primary!==undefined?fmt(m.primary,1)+" ปี":"–"}${m?.relative!==null&&m?.relative!==undefined?" · Relative "+fmt(m.relative,1)+"%":""}`)}})
+  $("pPetAge").innerHTML=petRows||row("Pet Age","ไม่มี Profile ที่เป็นสัตว์เลี้ยง");
+}
+function updateProgress(){
+  const req=[...document.querySelectorAll("[data-required]")].filter(e=>!e.closest(".hidden"));
+  const filled=req.filter(e=>e.value!=="").length,p=req.length?Math.round(filled/req.length*100):0;
+  $("progressFill").style.width=p+"%";$("progressPct").textContent=p+"%";
+  let lv=1;for(let s=1;s<=6;s++){const r=[...document.querySelectorAll(`[data-step="${s}"] [data-required]`)].filter(e=>!e.closest(".hidden"));if(!r.length||r.every(e=>e.value!==""))lv=s+1;else break}
+  $("progressLabel").textContent=`Level ${lv} of 7`;document.querySelectorAll(".level").forEach(e=>e.classList.toggle("active",+e.dataset.l<=lv));
+}
+function clearForm(){
+  document.querySelectorAll("input").forEach(e=>e.value="");
+  document.querySelectorAll("select").forEach(e=>e.selectedIndex=0);
+  ["a","b"].forEach(p=>{renderProfile(p);$(p+"_dynamic").innerHTML="";$(p+"_breed").innerHTML='<option value="">เลือกชนิดสัตว์ก่อน</option>';$(p+"_pet_ref").textContent="เลือกชนิดและพันธุ์เพื่อดูช่วงอายุอ้างอิงและวิธีคำนวณ";document.querySelectorAll(".custom-life-"+p).forEach(e=>e.classList.add("hidden"))});
+  $("progressFill").style.width="0%";$("progressPct").textContent="0%";$("progressLabel").textContent="Level 1 of 7";
+  document.querySelectorAll(".level").forEach((e,i)=>e.classList.toggle("active",i===0));
+  calculate();window.scrollTo({top:0,behavior:"smooth"});
+}
+function printReport(){calculate();setTimeout(()=>window.print(),80)}
+document.querySelectorAll("input,select").forEach(e=>e.addEventListener("input",calculate));
+["a","b"].forEach(p=>{
+  [p+"_pet_age",p+"_life_min",p+"_life_max"].forEach(id=>{const el=$(id);if(el)el.addEventListener("input",()=>{updatePetReference(p);calculate()})});
+});
+refreshPetAgePanels();
+calculate();
+</script>
+</body>
+</html>
