@@ -195,6 +195,21 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
   .progress.sticky-compact .levels{display:none}
 }
 
+
+#liveQualityYears{
+  padding:4px 9px;
+  border-radius:999px;
+  background:#f3edfa;
+  transition:transform .18s ease, background .18s ease;
+}
+#liveQualityYears.changed{
+  transform:scale(1.06);
+  background:#e8dcf6;
+}
+@media(max-width:700px){
+  #liveQualityYears{font-size:11px;padding:3px 7px}
+}
+
 </style>
 </head>
 <body>
@@ -213,7 +228,13 @@ input:focus,select:focus{outline:2px solid #bad7f0;border-color:var(--blue)}
   </section>
 
   <section class="progress" id="stickyProgress">
-    <div class="progress-head"><strong id="progressLabel">Level 1 of 7</strong><span id="progressPct">0%</span></div>
+    <div class="progress-head">
+      <strong id="progressLabel">Level 1 of 7</strong>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span id="liveQualityYears" style="font-weight:700;color:var(--purple)">Quality: – ปีเต็ม</span>
+        <span id="progressPct">0%</span>
+      </div>
+    </div>
     <div class="track"><div class="fill" id="progressFill"></div></div>
     <div class="levels">
       <div class="level active" data-l="1">1 · Profiles</div><div class="level" data-l="2">2 · Lifestyle</div><div class="level" data-l="3">3 · Daily life</div>
@@ -892,6 +913,7 @@ function calculate(){
   const a=collectProfile("a"),b=collectProfile("b"),h=n("horizon_years");
   if(!a.entity||!b.entity||!h){
     ["sharedYears","qualityYears","qualityRatio","horizonOut","heroYears"].forEach(id=>$(id).textContent="–");
+    updateLiveQuality(null);
     ["durCurrent","durFutureWorking","durOneRetired","durBothRetired"].forEach(id=>{if($(id))$(id).textContent="–"});
     $("barShared").style.width="0%";$("barQuality").style.width="0%";$("labShared").textContent="–";$("labQuality").textContent="–";
     $("phaseResultBody").innerHTML="";
@@ -922,6 +944,7 @@ function calculate(){
   $("qualityRatio").textContent=fmt(ratio,1)+"%";
   $("horizonOut").textContent=fmt(h,1);
   $("heroYears").textContent=fmt(qualityY,2);
+  updateLiveQuality(qualityY);
   $("barShared").style.width="100%";
   $("barQuality").style.width=Math.min(100,ratio)+"%";
   $("labShared").textContent=fmt(sharedY,2)+" ปี";
@@ -1063,6 +1086,29 @@ document.querySelectorAll("input,select").forEach(e=>{
     if(el)el.addEventListener("input",()=>{updatePetReference(p);calculate();saveForm()});
   });
 });
+
+
+let lastLiveQuality=null;
+function updateLiveQuality(value){
+  const el=$("liveQualityYears");
+  if(!el) return;
+  if(value===null || !Number.isFinite(value)){
+    el.textContent="Quality: – ปีเต็ม";
+    lastLiveQuality=null;
+    return;
+  }
+  const diff = lastLiveQuality===null ? null : value-lastLiveQuality;
+  let delta="";
+  if(diff!==null && Math.abs(diff)>=0.0005){
+    delta=` ${diff>0?"▲":"▼"} ${fmt(Math.abs(diff),3)}`;
+  }
+  el.textContent=`Quality: ${fmt(value,2)} ปีเต็ม${delta}`;
+  el.classList.remove("changed");
+  void el.offsetWidth;
+  el.classList.add("changed");
+  setTimeout(()=>el.classList.remove("changed"),240);
+  lastLiveQuality=value;
+}
 
 function updateStickyProgress(){
   const hero=$("heroSection"), progress=$("stickyProgress");
